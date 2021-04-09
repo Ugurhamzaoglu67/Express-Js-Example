@@ -7,13 +7,13 @@ const adminRoutes = require('./routes/admin')
 const userRoutes = require('./routes/user')
 
 
-app.use(bodyParser.urlencoded({extend:false}))
-
+app.use(express.static(path.join(__dirname, 'public')));
 
 //routes
-
 app.use('/admin',adminRoutes);
 app.use(userRoutes);
+
+
 
 
 app.use((req,res) => {
