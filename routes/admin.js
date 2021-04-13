@@ -39,7 +39,11 @@ const products = [
 
 router.get('/add-product',(req,res,next) => {
 
-     res.render('add-product',{my_title:'Ürün Ekleme Sayfası'})
+     res.render('add-product',{
+           my_title:'Ürün Ekleme Sayfası',
+           path:'/admin/add-product'
+      
+      })
 
 });
 
