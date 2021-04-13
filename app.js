@@ -1,22 +1,16 @@
 const express = require('express')
-
 const app = express()
-const path  = require('path')
 
-const bodyParser = require('body-parser')
-const adminRoutes = require('./routes/admin')
+const admin = require('./routes/admin')
 const userRoutes = require('./routes/user')
 
 
 app.set('view engine','ejs')
-
-
-
 app.use(express.static('public'));
-
+app.use(express.urlencoded({ extended: true }))
 
 //routes
-app.use('/admin',adminRoutes);
+app.use('/admin',admin.routes);
 app.use(userRoutes);
 
 
