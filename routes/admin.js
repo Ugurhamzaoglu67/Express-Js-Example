@@ -6,7 +6,7 @@ const path =require('path')
 
 router.get('/add-product',(req,res,next) => {
 
-     res.render('add-product')
+     res.render('add-product',{my_title:'Ürün Ekleme Sayfası'})
 
 });
 

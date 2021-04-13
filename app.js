@@ -1,10 +1,12 @@
 const express = require('express')
+
 const app = express()
 const path  = require('path')
 
 const bodyParser = require('body-parser')
 const adminRoutes = require('./routes/admin')
 const userRoutes = require('./routes/user')
+
 
 app.set('view engine','ejs')
 
@@ -20,7 +22,7 @@ app.use(userRoutes);
 
 app.use((req,res) => {
 
-      res.status(404).sendFile('404')
+      res.status(404).render('404',{my_title:'404 Not Found..'})
 
 });
 
