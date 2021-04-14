@@ -2,23 +2,23 @@
 <html lang="en">
 
 <head>
-      <%-include('./layouts/head.ejs') %>
+      <%-include('../layouts/head.ejs') %>
 
 </head>
 
 <body>
 
-      <%- include('./layouts/nav.ejs')%>
+      <%- include('../layouts/nav.ejs')%>
 
       <div class="container" style="padding-top:100px;">
             <div class="row mt-3">
                   <div class="col-lg-3">
-                        <%- include('./layouts/leftmenu.ejs') %> 
+                        <%- include('../layouts/leftmenu.ejs') %> 
                   </div>
 
                   <div class="col-lg-9">
 
-                        <form action="/admin/add-product" method="post">
+                        <form action="/admin/edit-product" method="post">
 
                               <div class="row mb-3">
                                     <label for="productname" class="col-sm-2 col-form-label">Product Name</label>
@@ -57,4 +57,4 @@
       </div>
 
 
-      <%- include('./layouts/footer.ejs') %>
+      <%- include('../layouts/footer.ejs') %>

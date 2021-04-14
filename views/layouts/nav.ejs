@@ -26,12 +26,43 @@
 
                         <li class="nav-item">
                               <a 
-                              
-                              class="nav-link" 
-                              
-                              
-                              href="#">Products</a>
+                              <% if(path==='/products') { %> 
+                                    class="nav-link active" 
+                                    
+                              <% } else { %> 
+                                    class="nav-link" 
+                              <% } %>      
+      
+                              href="/products">Products</a>
                         </li>
+
+                        <li class="nav-item">
+                              <a 
+                              <% if(path==='/cart') { %> 
+                                    class="nav-link active" 
+                                    
+                              <% } else { %> 
+                                    class="nav-link" 
+                              <% } %>      
+      
+                              href="/cart">Cart</a>
+                        </li>
+
+
+                        <li class="nav-item">
+                              <a 
+                              <% if(path==='/orders') { %> 
+                                    class="nav-link active" 
+                                    
+                              <% } else { %> 
+                                    class="nav-link" 
+                              <% } %>      
+      
+                              href="/orders">Orders</a>
+                        </li>
+
+
+
 
                         <li class="nav-item">
                               <a 
@@ -44,6 +75,23 @@
                               <% } %> 
                               href="/admin/add-product">Add Product</a>
                         </li>
+
+                        
+                        <li class="nav-item">
+                              <a 
+
+                              <% if(path==='/admin/products') { %> 
+                              class="nav-link active"
+                              
+                              <% } else { %> 
+                                    class="nav-link"
+                              <% } %> 
+                              href="/admin/products">Admin Products</a>
+                        </li>
+
+
+
+
 
 
                   </ul>
