@@ -1,7 +1,7 @@
 const Product = require('../models/productModel')
 
 
-
+//_______________________________________  ANASAYFA ________________________
 exports.getIndex = (req,res,next) => {
       const all_products = Product.getAll()
 
@@ -13,7 +13,7 @@ exports.getIndex = (req,res,next) => {
 }
 
 
-//_______________________________________  getProducts ________________________
+//_______________________________________  TÜM HEPSİ ________________________
 exports.getProducts = (req,res,next) => {
 
       const all_products = Product.getAll()
@@ -24,10 +24,22 @@ exports.getProducts = (req,res,next) => {
             path:'/products'
       
       })
+}
+
+
+//_______________________________________  TEK ÜRÜN( ID ) ________________________
+exports.getProduct = (req,res,next) => {
+
+      
+      const productId = req.params.productid
+      console.log(Product.getById(productId))
+      res.redirect('/')
 
 }
 
-//_______________________________________  getProductDetails ________________________
+
+
+//_______________________________________  DETAYLARI GETİR ________________________
 exports.getProductDetails = (req,res) => {
       res.render('../views/shop/details', {
             my_title:'Details Page',
@@ -35,7 +47,7 @@ exports.getProductDetails = (req,res) => {
       })
 }
 
-//_______________________________________  getCart _________________________________
+//_______________________________________  KART  _________________________________
 exports.getCart = (req,res) => {
       res.render('../views/shop/cart', {
             my_title:'Cart Page',
@@ -43,7 +55,7 @@ exports.getCart = (req,res) => {
       })
 }
 
-//_______________________________________  getOrders _________________________________
+//_______________________________________  SİPARİŞLERİ GETİR  _________________________________
 exports.getOrders = (req,res) => {
       
       res.render('../views/shop/orders.ejs', {

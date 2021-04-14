@@ -11,17 +11,23 @@
                               class="card-img-top" alt="...">
                         <div class="card-body">
                               <h5 class="card-title">
-                                    <a href="#"><%= product.name %></a>    
+                                    <a href="/products/<%= product.id %> "><%= product.name %></a>    
                                     </h5>
-                              <p class="card-text"><%= product.description %> </p>
+                        <p class="card-text">
+                              <small style="font-weight: bolder;">
+                                    <i class="fas fa-lira-sign"></i>  <%= product.price %> 
+                              </small>   
+                              
+                        </p>
             
                         </div>
             
-                        <div class="card-footer">
-                              <small style="font-weight: bolder;">
-                                    <i class="fas fa-lira-sign"></i>  <%= product.price %> TL 
-                              </small>
-                              <a href="#" class="btn btn-outline-primary btn-sm float-end">
+                        <div class="card-footer text-center">
+                              
+                              <a href="/products/<%= product.id %> " class="btn btn-dark btn-sm ">
+                                    <i class="fas fa-angle-double-right"></i> Details
+                              </a>
+                              <a href="#" class="btn btn-outline-primary btn-sm" style="margin-left: 3px;">
                                     <i class="fas fa-cart-plus"></i>  Add to Cart
                               </a>
                         </div>
