@@ -30,10 +30,14 @@ exports.getProducts = (req,res,next) => {
 //_______________________________________  TEK ÜRÜN( ID ) ________________________
 exports.getProduct = (req,res,next) => {
 
-      
-      const productId = req.params.productid
-      console.log(Product.getById(productId))
-      res.redirect('/')
+      const product = Product.getById(req.params.productid)
+
+      res.render('../views/shop/product-detail.ejs', {
+            my_title:product.name,
+            product:product,
+            path:'/products'
+      })
+
 
 }
 
