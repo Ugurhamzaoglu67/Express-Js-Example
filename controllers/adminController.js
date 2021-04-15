@@ -9,9 +9,15 @@ exports.getProducts = (req,res,next) => {
       res.render('../views/admin/produtcs.ejs', {
             my_title:'Admin Products',
             products:all_products,
-            path:'/admin/products'
-      
+            path:'/admin/products',
+            my_action: req.query.action //query-> linkin sonundaki QueryString'leri verir.
+           
       })
+
+  
+      console.log(req.query)
+
+    
 
 }
 //_______________________________________  getAddProduct ________________________
@@ -63,5 +69,13 @@ exports.getEditProduct = (req,res,next) => {
 
 
         Product.Update(product)
-        res.redirect('/admin/products')
+        res.redirect('/admin/products?action=edit&id='+product.id)
+}
+
+exports.postDeleteProduct = (req,res) => {
+
+      Product.DeleteById(req.body.productid) // models -> productModel.js  içine bu method ve id gidicek
+      res.redirect('/admin/products?action=delete')
+
+
 }
