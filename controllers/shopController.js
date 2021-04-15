@@ -18,7 +18,7 @@ exports.getProducts = (req,res,next) => {
 
       const all_products = Product.getAll()
 
-      res.render('../views/shop/products', {
+      res.render('../views/shop/products.ejs', {
             my_title:'Products Page',
             products:all_products,
             path:'/products'
