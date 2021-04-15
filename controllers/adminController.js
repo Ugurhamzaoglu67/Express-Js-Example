@@ -41,9 +41,12 @@ exports.getAddProduct = (req,res,next) => {
 //_______________________________________  getEditProduct ________________________
 exports.getEditProduct = (req,res,next) => {
 
+    const product = Product.getById(req.params.productid)
+
       res.render('../views/admin/edit-product',{
             my_title:'Ürün Düzenle',
-            path:'/admin/edit-product'
+            path:'/admin/products',
+            product:product
        
        })
  
@@ -51,5 +54,14 @@ exports.getEditProduct = (req,res,next) => {
 //_______________________________________  postEditProduct ________________________
  exports.postEditProduct = (req,res,next)=> {
 
-      res.redirect('/')
+        const product = Product.getById(req.body.id)
+
+        product.name = req.body.name
+        product.price = req.body.price
+        product.description = req.body.description
+        product.imageUrl = req.body.imageUrl
+
+
+        Product.Update(product)
+        res.redirect('/admin/products')
 }

@@ -5,9 +5,11 @@ const  adminController = require('../controllers/adminController')
 
 router.get('/add-product', adminController.getAddProduct);
 router.post('/add-product',adminController.postAddProduct);
-router.get('/edit-product',adminController.getEditProduct);
-router.post('/edit-product',adminController.postEditProduct);
 router.get('/products',adminController.getProducts);
+
+// edit product
+router.get('/products/:productid',adminController.getEditProduct);
+router.post('/products',adminController.postEditProduct);
 
 
 
