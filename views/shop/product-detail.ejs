@@ -15,8 +15,8 @@
                  <%- include ('../layouts/leftmenu.ejs') %> 
             </div>
 
-            <div class="col-lg-9">
-                  <div class="row p-2" style='border: 1px solid black; border-radius: 5px;'>
+            <div class="col-lg-9 " style='border: 1px solid black; border-radius: 5px;'>
+                  <div class="row p-2" >
 
                         <div class="col-md-4">
                               <img src="/img/<%= product.imageUrl %> " alt="<%= product.description %> " class="img-fluid">    
@@ -26,14 +26,26 @@
 
                               <h2><%= product.name %> </h2>
                               <hr>
-
-                              <p><%= product.description %> </p>
-                              <p>Fiyat : <%= product.price %> <i class="fas fa-lira-sign"></i></p> 
+                                <a href="" class="btn btn-outline-dark btn-sm mb-3">Telefonlar</a>
+                                <div class="mb-3">
+                                      <h4 class="text-primary mb-3"> <%= product.price %> <i class="fas fa-lira-sign"></i></h4>
+                                      
                               <button type='submit' class="btn btn-success">
                                     <i class="fas fa-cart-plus"></i> Add to Cart
                               </button>
+                                </div>   
+
+                           
+                              
                         </div>
 
+                  </div>
+
+                  <div class="row p-2 ">
+                        <div class="col-md-12">
+                        <hr>
+                                 <p><%= product.description %> </p>
+                        </div>
                   </div>
                   
             </div>
