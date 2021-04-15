@@ -1,7 +1,15 @@
 <div class="list-group">
 
-      <a href="" class="list-group-item">Telefonlar</a>
-      <a href="" class="list-group-item">Bilgisayarlar</a>
-      <a href="" class="list-group-item">Laptoplar</a>
+      <% if (categories.length > 0) {%>
+           <% categories.forEach((category) => {    %>
 
+            <a href="/category/<%= category.id %>" class="list-group-item"><%= category.name%></a>
+            <% }) %>
+
+
+
+
+      <% } else  { %>
+            <h1>Kategori Yok</h1>
+      <% }%>
 </div>

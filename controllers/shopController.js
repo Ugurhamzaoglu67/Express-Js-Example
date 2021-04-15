@@ -1,13 +1,15 @@
 const Product = require('../models/productModel')
-
+const Category = require('../models/categoryModel')
 
 //_______________________________________  ANASAYFA ________________________
 exports.getIndex = (req,res,next) => {
       const all_products = Product.getAll()
+      const categories = Category.getAll()
 
       res.render('../views/shop/index.ejs', {
             my_title:'Shopping',
             products:all_products,
+            categories:categories,
             path:'/'
       })
 }
@@ -17,10 +19,13 @@ exports.getIndex = (req,res,next) => {
 exports.getProducts = (req,res,next) => {
 
       const all_products = Product.getAll()
+      const categories = Category.getAll()
+
 
       res.render('../views/shop/products.ejs', {
             my_title:'Products Page',
             products:all_products,
+            categories:categories,
             path:'/products'
       
       })
@@ -40,7 +45,6 @@ exports.getProduct = (req,res,next) => {
 
 
 }
-
 
 
 //_______________________________________  DETAYLARI GETİR ________________________
