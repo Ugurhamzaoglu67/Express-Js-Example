@@ -3,6 +3,7 @@ const Category = require('../models/categoryModel')
 
 //_______________________________________  ANASAYFA ________________________
 exports.getIndex = (req,res,next) => {
+      const categoryid = req.params.categoryid
       const all_products = Product.getAll()
       const categories = Category.getAll()
 
@@ -10,6 +11,7 @@ exports.getIndex = (req,res,next) => {
             my_title:'Shopping',
             products:all_products,
             categories:categories,
+            selectedCategory:categoryid,
             path:'/'
       })
 }
@@ -17,7 +19,7 @@ exports.getIndex = (req,res,next) => {
 
 //_______________________________________  TÜM HEPSİ ________________________
 exports.getProducts = (req,res,next) => {
-
+      const categoryid = req.params.categoryid
       const all_products = Product.getAll()
       const categories = Category.getAll()
 
@@ -26,6 +28,7 @@ exports.getProducts = (req,res,next) => {
             my_title:'Products Page',
             products:all_products,
             categories:categories,
+            selectedCategory:categoryid,
             path:'/products'
       
       })
@@ -33,8 +36,8 @@ exports.getProducts = (req,res,next) => {
 
 //_______________________________________  KATEGORİYE GÖRE GETİR ________________________
 exports.getProductsByCategoryId = (req,res) => {
-      const categoryid = req.params.categoryid
-      const all_products = Product.getProductsByCategoryId(categoryid)
+      const categoryid = Number(req.params.categoryid)
+      const all_products = Product.getProductsByCategoryId(categoryid.toString())
       const categories  = Category.getAll()
 
 
@@ -42,9 +45,13 @@ exports.getProductsByCategoryId = (req,res) => {
             my_title:'Products',
             products:all_products,
             categories : categories,
+            selectedCategory:categoryid,
             path:'/products'
 
       })
+
+
+      console.log(typeof categoryid)
 
 }
 
@@ -52,16 +59,17 @@ exports.getProductsByCategoryId = (req,res) => {
 
 //_______________________________________  DETAY / TEK ÜRÜN( ID ) ________________________
 exports.getProduct = (req,res) => {
-
+      const categoryid = Number(req.params.categoryid)
      const product = Product.getById(req.params.productid)
-      const categoryid = req.params.categoryid
-     // const product = Product.getProductsByCategoryId(categoryid)
+
+    // const product = Product.getProductsByCategoryId(categoryid.toString())
       const categories  = Category.getAll()
 
       res.render('../views/shop/product-detail.ejs', {
             my_title:product.name,
             product:product,
             categories : categories,
+            selectedCategory:categoryid,
             path:'/products'
       })
 
