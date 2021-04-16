@@ -31,28 +31,40 @@ exports.getProducts = (req,res,next) => {
       })
 }
 
+//_______________________________________  KATEGORİYE GÖRE GETİR ________________________
+exports.getProductsByCategoryId = (req,res) => {
+      const categoryid = req.params.categoryid
+      const all_products = Product.getProductsByCategoryId(categoryid)
+      const categories  = Category.getAll()
 
-//_______________________________________  TEK ÜRÜN( ID ) ________________________
-exports.getProduct = (req,res,next) => {
 
-      const product = Product.getById(req.params.productid)
-
-      res.render('../views/shop/product-detail.ejs', {
-            my_title:product.name,
-            product:product,
+      res.render('../views/shop/products.ejs', {
+            my_title:'Products',
+            products:all_products,
+            categories : categories,
             path:'/products'
-      })
 
+      })
 
 }
 
 
-//_______________________________________  DETAYLARI GETİR ________________________
-exports.getProductDetails = (req,res) => {
-      res.render('../views/shop/details', {
-            my_title:'Details Page',
-            path:'/details'
+
+//_______________________________________  DETAY / TEK ÜRÜN( ID ) ________________________
+exports.getProduct = (req,res) => {
+
+     const product = Product.getById(req.params.productid)
+      const categoryid = req.params.categoryid
+     // const product = Product.getProductsByCategoryId(categoryid)
+      const categories  = Category.getAll()
+
+      res.render('../views/shop/product-detail.ejs', {
+            my_title:product.name,
+            product:product,
+            categories : categories,
+            path:'/products'
       })
+
 }
 
 //_______________________________________  KART  _________________________________
@@ -72,3 +84,15 @@ exports.getOrders = (req,res) => {
       })
 }
 
+
+
+
+
+//_______________________________________  (FAZLALIK)DETAYLARI GETİR  ________________________
+// exports.getProductDetails = (req,res) => {
+//
+//       res.render('../views/shop/details', {
+//             my_title:'Details Page',
+//             path:'/details'
+//       })
+// }
