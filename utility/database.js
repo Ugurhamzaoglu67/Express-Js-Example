@@ -1,15 +1,13 @@
-
-const  mysql = require('mysql2')
 require('dotenv').config()
+const Sequelize = require('sequelize')
 
-let my_password = process.env.PASSWORD
+const my_pw = process.env.PASSWORD
 
-const connection = mysql.createConnection({
+const sequelize = new Sequelize('node-app','root',my_pw,{
     host:'127.0.0.1',
-    user:'root',
-    password:my_password,
-    database:'node-app'
-
+    dialect:'mysql'
 })
 
-module.exports = connection.promise()
+module.exports = sequelize
+
+
