@@ -6,14 +6,17 @@ exports.getIndex = (req,res,next) => {
       const categoryid = req.params.categoryid
 
 
-      Product.getAll()
+      Product.findAll(
+          {
+              attributes : ['id','name','price','imageUrl'],
+          })
           .then( products => {
-                Category.getAll()
+                Category.findAll()
                     .then((categories) => {
                       res.render('../views/shop/index.ejs', {
                           my_title:'Shopping',
-                          products:products[0],
-                          categories:categories[0],
+                          products:products,
+                          categories:categories,
                           selectedCategory:categoryid,
                           path:'/'
                       })
@@ -25,23 +28,24 @@ exports.getIndex = (req,res,next) => {
                 console.log(err)
                   })
 
-
 }
-
 
 //_______________________________________  TÜM HEPSİ ________________________
 exports.getProducts = (req,res,next) => {
       const categoryid = req.params.categoryid
 
 
-      Product.getAll()
+      Product.findAll(
+          {
+              attributes : ['id','name','price','imageUrl'],
+          })
           .then( all_products => {
-                Category.getAll()
+                Category.findAll()
                     .then((categories) => {
                         res.render('../views/shop/products.ejs', {
                             my_title:'Products Page',
-                            products:all_products[0],
-                            categories:categories[0],
+                            products:all_products,
+                            categories:categories,
                             selectedCategory:categoryid,
                             path:'/products'
                         })
@@ -82,25 +86,32 @@ exports.getProductsByCategoryId = (req,res) => {
 exports.getProduct = (req,res) => {
         const categoryid = Number(req.params.categoryid)
         // const product = Product.getProductsByCategoryId(categoryid.toString())
-        const categories  = Category.getAll()
 
-        Product.getById(req.params.productid)
-            .then((product) => {
-                console.log(product[0][0])
 
-                res.render('shop/product-detail.ejs', {
-                    my_title:product[0][0].name,
-                    product:product[0][0], //objenin kendisi, dizi olmadan gelir -> [0][0] ile..
-                    categories : categories,
-                    selectedCategory:categoryid,
-                    path:'/details'
+        Product.findAll({
+            attributes : ['id','name','price','imageUrl','description'],
+            where: {id : req.params.productid}
+        })
+        .then((products) => {
+                Category.findAll()
+                    .then((categories) => {
+
+                        res.render('shop/product-detail.ejs', {
+                            my_title:products[0].name,
+                            product:products[0], //objenin kendisi, dizi olmadan gelir -> [0][0] ile..
+                            categories : categories,
+                            selectedCategory:categoryid,
+                            path:'/details'
+                        })
+                    }).catch((err) => {
+                    console.log(err)
                 })
 
-            }).catch((err) => {
+            })
+
+        .catch((err) => {
                 console.log(err)
-        })
-
-
+            })
 
 }
 
@@ -125,11 +136,3 @@ exports.getOrders = (req,res) => {
 
 
 
-//_______________________________________  (FAZLALIK)DETAYLARI GETİR  ________________________
-// exports.getProductDetails = (req,res) => {
-//
-//       res.render('../views/shop/details', {
-//             my_title:'Details Page',
-//             path:'/details'
-//       })
-// }

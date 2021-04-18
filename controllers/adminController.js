@@ -5,11 +5,11 @@ const Category = require('../models/categoryModel')
 //_______________________________________  getProducts ________________________
 exports.getProducts = (req,res,next) => {
 
-    Product.getAll()
+    Product.findAll()
         .then((all_products) => {
             res.render('../views/admin/produtcs.ejs', {
                 my_title:'Admin Products',
-                products:all_products[0],
+                products:all_products,
                 path:'/admin/products',
                 my_action: req.query.action //query-> linkin sonundaki QueryString'leri verir.
 
@@ -25,13 +25,17 @@ exports.getProducts = (req,res,next) => {
 exports.getAddProduct = (req,res,next) => {
 
         const categoryid = Number(req.params.categoryid)
+        Category.findAll()
+            .then((categories) => {
+                res.render('../views/admin/add-product',{
+                    my_title:'Yeni Ürün',
+                    categories:categories,
+                    selectedCategory:categoryid,
+                    path:'/admin/add-product'
 
-        res.render('../views/admin/add-product',{
-            my_title:'Yeni Ürün',
-            //categories:categories[0],
-            //selectedCategory:categoryid,
-            path:'/admin/add-product'
-
+                })
+            }).catch((err) => {
+            console.log(err)
         })
  
  }
@@ -58,30 +62,23 @@ exports.getAddProduct = (req,res,next) => {
             })
 
         */
-
        // const categoryid = req.body.categoryid
-
-
         /*2.YÖNTEM */
-
          const prd = Product.build({
              name:name,
              price:price,
-             imageUlr:imageUrl,
+             imageUrl:imageUrl,
              description:description
          })
 
          prd.save()
              .then((result) => {
-                 console.log(result)
+                 console.log("Ürün ekleme başarılı..")
                  res.redirect('/')
              })
              .catch((err) => {
                  console.log(err)
              })
-
-
-
 
 }
 
@@ -90,52 +87,66 @@ exports.getEditProduct = (req,res,next) => {
 
     const categoryid = Number(req.params.categoryid)
 
-    Product.getById(req.params.productid)
+    Product.findByPk(req.params.productid)
         .then((product) => {
-            Category.getAll()
+
+            if(!product){
+                return res.redirect('/')
+            }
+            Category.findAll()
                 .then((categories) => {
                     res.render('admin/edit-product',{
                         my_title:'Ürün Düzenle',
-                        categories:categories[0],
+                        categories:categories,
                         selectedCategory:categoryid,
                         path:'/admin/products',
-                        product:product[0][0]
+                        product:product
                 })
-            }).catch((err) => {
-                console.log(err)
-            })
+                })
+                .catch((err) => {
+                    console.log(err)
+                     })
 
+                })
+                .catch((err) => {
+                    console.log(err)
+                    })
 
-        }).catch((err) => {
-            console.log(err)
-    })
-
-
-
-
- 
  }
+
+
 //_______________________________________  postEditProduct ________________________
  exports.postEditProduct = (req,res,next)=> {
 
-       const product = new Product()
-        product.id = req.body.id
-        product.name = req.body.name
-        product.price = req.body.price
-        product.description = req.body.description
-        product.imageUrl = req.body.imageUrl
-        product.categoryid = req.body.categoryid
+        const id = req.body.id
+        const name = req.body.name
+        const price = req.body.price
+        const description = req.body.description
+        const imageUrl = req.body.imageUrl
+        const categoryid = req.body.categoryid
 
-        Product.Update(product)
-            .then(() => {
-                res.redirect('/admin/products?action=edit&id='+product.id)
-                console.log("Güncelleme başarılı...")
+        Product.findByPk(id)
+            .then((product) => {
+                product.name = name
+                product.price = price
+                product.description = description
+                product.imageUrl = imageUrl
+                product.categoryid = categoryid
 
-            }).catch((err) => {
+                return product.save() //Obje güncellenir.
+            })
+            .then(result => {
+
+                console.log("Güncelleme başarılı")
+                res.redirect('/admin/products?action=edit')
+            })
+            .catch((err) => {
                 console.log(err)
-                 })
-
+            })
 }
+
+
+
 
 exports.postDeleteProduct = (req,res) => {
 
