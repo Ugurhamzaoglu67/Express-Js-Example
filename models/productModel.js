@@ -14,10 +14,10 @@ module.exports = class Product{
       }
 
       saveProduct() {
-
+            return connection.execute('INSERT INTO products (name,price,imageUrl,description) VALUES (?,?,?,?)',[this.name,this.price,this.imageUrl,this.description])
       }
 
-      //Nesne oluşturmadan, direk sınıf üzerinden bu şekilde ulaşabiliriz-> Product.getAll()
+             //Nesne oluşturmadan, direk sınıf üzerinden bu şekilde ulaşabiliriz-> Product.getAll()
       static getAll() {
             return connection.execute('SELECT * FROM products')
       }
@@ -31,7 +31,7 @@ module.exports = class Product{
 
       static getProductsByCategoryId(categoryid) {
 
-//Bütün ürünleri categoryid alanlarına bakacak, bizim gönderdiğimizle eşleşen BÜTÜN  ürünleri Geriye gönder
+            //Bütün ürünleri categoryid alanlarına bakacak, bizim gönderdiğimizle eşleşen BÜTÜN  ürünleri Geriye gönder
       }
 
       static Update(product) {

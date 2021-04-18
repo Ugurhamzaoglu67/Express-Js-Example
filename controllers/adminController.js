@@ -51,7 +51,13 @@ exports.getAddProduct = (req,res,next) => {
         product.description = req.body.description
 
         product.saveProduct()
-        res.redirect('/')
+            .then((result) => {
+                res.redirect('/')
+                console.log("Ürün ekleme başarılı...")
+            }).catch((err) => {
+                console.log(err)
+             })
+
 }
 
 //_______________________________________  getEditProduct ________________________
