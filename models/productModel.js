@@ -14,7 +14,8 @@ module.exports = class Product{
       }
 
       saveProduct() {
-            return connection.execute('INSERT INTO products (name,price,imageUrl,description) VALUES (?,?,?,?)',[this.name,this.price,this.imageUrl,this.description])
+            return connection.execute('INSERT INTO products (name,price,imageUrl,description,categoryid) VALUES (?,?,?,?,?)',
+                [this.name,this.price,this.imageUrl,this.description,this.categoryid])
       }
 
              //Nesne oluşturmadan, direk sınıf üzerinden bu şekilde ulaşabiliriz-> Product.getAll()
@@ -36,8 +37,8 @@ module.exports = class Product{
 
       static Update(product) {
 
-           return  connection.execute('UPDATE products SET products.name=?, products.price=?, products.imageUrl=?, products.description=? WHERE products.id=?',
-                [product.name, product.price, product.imageUrl, product.description, product.id]
+           return  connection.execute('UPDATE products SET products.name=?, products.price=?, products.imageUrl=?, products.description=?, products.categoryid=? WHERE products.id=?',
+                [product.name, product.price, product.imageUrl, product.description, product.categoryid, product.id]
                 )
 
       }

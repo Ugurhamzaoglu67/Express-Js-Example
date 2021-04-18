@@ -4,16 +4,21 @@ const Category = require('../models/categoryModel')
 //_______________________________________  ANASAYFA ________________________
 exports.getIndex = (req,res,next) => {
       const categoryid = req.params.categoryid
-      const categories = Category.getAll()
+
 
       Product.getAll()
           .then( products => {
-                res.render('../views/shop/index.ejs', {
-                      my_title:'Shopping',
-                      products:products[0],
-                      categories:categories,
-                      selectedCategory:categoryid,
-                      path:'/'
+                Category.getAll()
+                    .then((categories) => {
+                      res.render('../views/shop/index.ejs', {
+                          my_title:'Shopping',
+                          products:products[0],
+                          categories:categories[0],
+                          selectedCategory:categoryid,
+                          path:'/'
+                      })
+              }).catch((err) => {
+                    console.log(err)
                 })
 
           }).catch((err) => {
@@ -27,16 +32,21 @@ exports.getIndex = (req,res,next) => {
 //_______________________________________  TÜM HEPSİ ________________________
 exports.getProducts = (req,res,next) => {
       const categoryid = req.params.categoryid
-      const categories = Category.getAll()
+
 
       Product.getAll()
           .then( all_products => {
-                res.render('../views/shop/products.ejs', {
-                      my_title:'Products Page',
-                      products:all_products[0],
-                      categories:categories,
-                      selectedCategory:categoryid,
-                      path:'/products'
+                Category.getAll()
+                    .then((categories) => {
+                        res.render('../views/shop/products.ejs', {
+                            my_title:'Products Page',
+                            products:all_products[0],
+                            categories:categories[0],
+                            selectedCategory:categoryid,
+                            path:'/products'
+                        })
+                    }).catch((err) => {
+                    console.log(err)
                 })
 
           }).catch((err) => {

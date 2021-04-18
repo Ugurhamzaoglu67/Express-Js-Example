@@ -21,21 +21,24 @@ exports.getProducts = (req,res,next) => {
              })
 
 
-
-
-    
-
 }
+
 //_______________________________________  getAddProduct ________________________
 exports.getAddProduct = (req,res,next) => {
-        const categories = Category.getAll()
+
         const categoryid = Number(req.params.categoryid)
-        res.render('../views/admin/add-product',{
-            my_title:'Yeni Ürün',
-            categories:categories,
-            selectedCategory:categoryid,
-            path:'/admin/add-product'
-       
+
+       Category.getAll()
+           .then((categories) => {
+               res.render('../views/admin/add-product',{
+                   my_title:'Yeni Ürün',
+                   categories:categories[0],
+                   selectedCategory:categoryid,
+                   path:'/admin/add-product'
+
+               })
+           }).catch((err) => {
+               console.log(err)
        })
  
  }
@@ -62,19 +65,25 @@ exports.getAddProduct = (req,res,next) => {
 
 //_______________________________________  getEditProduct ________________________
 exports.getEditProduct = (req,res,next) => {
-    const categories = Category.getAll()
+
     const categoryid = Number(req.params.categoryid)
 
     Product.getById(req.params.productid)
         .then((product) => {
-            res.render('admin/edit-product',{
-                my_title:'Ürün Düzenle',
-                categories:categories,
-                selectedCategory:categoryid,
-                path:'/admin/products',
-                product:product[0][0]
-
+            Category.getAll()
+                .then((categories) => {
+                    res.render('admin/edit-product',{
+                        my_title:'Ürün Düzenle',
+                        categories:categories[0],
+                        selectedCategory:categoryid,
+                        path:'/admin/products',
+                        product:product[0][0]
+                })
+            }).catch((err) => {
+                console.log(err)
             })
+
+
         }).catch((err) => {
             console.log(err)
     })

@@ -1,11 +1,4 @@
-
-
-const categories = [
-    {id:1, name:'Telefonlar',description:'Akıllı Telefonlar'},
-    {id:2, name:'Bilgisayarlar',description:'Bilgisayar Ürünleri'},
-    {id:3, name:'Beyaz Eşya',description:'Beyaz Eşya setleri'},
-]
-
+const connection = require('../utility/database')
 
 module.exports = class Categories {
 
@@ -15,36 +8,34 @@ module.exports = class Categories {
         this.description = description
     }
 
-
+    //____________________________ (1) DB ye Kayıt YAPMA_________________
     saveCategory() {
-        categories.push(this) //Kendisini liste üzerine eklemiş olduk.
+      return  connection.execute('INSERT INTO  categories (name,description) VALUES (?,?)',
+            [this.name, this.description]
+            )
     }
 
-
-
-    //Sınıf üzerinden Çağırılır bu
+    //____________________________ (2) Tüm categories Tablosunu Getirme _________________
     static getAll() {
-        return categories
+        return connection.execute('SELECT * FROM categories')
     }
 
-
-    //Bana dışardan id getir
+    //____________________________ (3) id 'ye Göre Getirme ________________________________
     static getById(id) {
-        return categories.find(i => i.id ===id) // Burdaki i ->Her bir elemanın id'si.
+        return connection.execute('SELECT * FROM categories WHERE id=?',[id])
     }
 
-    //Bana dışardan category gönder
+    //____________________________ (4) Ürün Güncelleme ________________________________
     static update(category) {
-        const index = categories.findIndex( i => i.id === id)
-
-        categories[index].name = category.name
-        categories[index].description = category.description
+        return connection.execute('UPDATE categories SET categories.name=?, categories.description=?',
+            [category.name, category.description])
     }
 
-    static deleteById(id) {
-        const index = categories.findIndex(i => i.id === id)
 
-        categories.splice(index,1)
+    //____________________________ (5) id'ye Göre Ürün Silme________________________________
+    static deleteById(id) {
+       return connection.execute('DELETE FROM categories WHERE id=?',
+           [id])
 
     }
 
