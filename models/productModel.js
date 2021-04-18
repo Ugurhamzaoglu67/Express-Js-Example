@@ -31,18 +31,20 @@ module.exports = class Product{
 
       static getProductsByCategoryId(categoryid) {
 
-            //Bütün ürünleri categoryid alanlarına bakacak, bizim gönderdiğimizle eşleşen BÜTÜN  ürünleri Geriye gönder
+
       }
 
       static Update(product) {
 
-
+           return  connection.execute('UPDATE products SET products.name=?, products.price=?, products.imageUrl=?, products.description=? WHERE products.id=?',
+                [product.name, product.price, product.imageUrl, product.description, product.id]
+                )
 
       }
 
       static DeleteById(id) {
 
-            //index'ten başla  1 TANE SİL
+            return connection.execute('DELETE FROM products WHERE id=?',[id])
 
 
       }

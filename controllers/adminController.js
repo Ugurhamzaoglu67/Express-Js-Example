@@ -87,8 +87,9 @@ exports.getEditProduct = (req,res,next) => {
 //_______________________________________  postEditProduct ________________________
  exports.postEditProduct = (req,res,next)=> {
 
-        const product = Product.getById(req.body.id)
+       const product = new Product()
 
+        product.id = req.body.id
         product.name = req.body.name
         product.price = req.body.price
         product.description = req.body.description
@@ -96,13 +97,30 @@ exports.getEditProduct = (req,res,next) => {
         product.categoryid = req.body.categoryid
 
         Product.Update(product)
-        res.redirect('/admin/products?action=edit&id='+product.id)
+            .then(() => {
+                res.redirect('/admin/products?action=edit&id='+product.id)
+                console.log("Güncelleme başarılı...")
+
+            }).catch((err) => {
+                console.log(err)
+                 })
+
 }
 
 exports.postDeleteProduct = (req,res) => {
 
-      Product.DeleteById(req.body.productid) // models -> productModel.js  içine bu method ve id gidicek
-      res.redirect('/admin/products?action=delete')
+      Product.DeleteById(req.body.productid)
+          .then((product) => {
+
+              res.redirect('/admin/products?action=delete')
+              console.log(`Silme başarılı. Silinen ID : ${req.body.productid}`)
+
+
+          })
+          .catch((err) => {
+              console.log(err)
+          })
+
 
 
 }
