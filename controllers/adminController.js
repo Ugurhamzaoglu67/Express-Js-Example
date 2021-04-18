@@ -5,20 +5,23 @@ const Category = require('../models/categoryModel')
 //_______________________________________  getProducts ________________________
 exports.getProducts = (req,res,next) => {
 
+    Product.getAll()
+        .then((all_products) => {
+            res.render('../views/admin/produtcs.ejs', {
+                my_title:'Admin Products',
+                products:all_products[0],
+                path:'/admin/products',
+                my_action: req.query.action //query-> linkin sonundaki QueryString'leri verir.
 
-        const all_products = Product.getAll()
+            })
 
-      res.render('../views/admin/produtcs.ejs', {
-            my_title:'Admin Products',
-            products:all_products,
 
-            path:'/admin/products',
-            my_action: req.query.action //query-> linkin sonundaki QueryString'leri verir.
-           
-      })
+        }).catch((err) => {
+            console.log(err)
+             })
 
-  
-      console.log(req.query)
+
+
 
     
 

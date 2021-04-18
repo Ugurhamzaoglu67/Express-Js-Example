@@ -17,10 +17,10 @@
 }
 
 .card-my-size {
-      height:26rem;
-      transition: all .5s;
+      height:28rem;
+      transition: all .6s ease-in-out;
 }
 
 .card-my-size:hover {
-      transform: scale(1.1);
+      transform: scale(1.02);
 }

@@ -4,34 +4,45 @@ const Category = require('../models/categoryModel')
 //_______________________________________  ANASAYFA ________________________
 exports.getIndex = (req,res,next) => {
       const categoryid = req.params.categoryid
-      const all_products = Product.getAll()
       const categories = Category.getAll()
 
-      res.render('../views/shop/index.ejs', {
-            my_title:'Shopping',
-            products:all_products,
-            categories:categories,
-            selectedCategory:categoryid,
-            path:'/'
-      })
+      Product.getAll()
+          .then( products => {
+                res.render('../views/shop/index.ejs', {
+                      my_title:'Shopping',
+                      products:products[0],
+                      categories:categories,
+                      selectedCategory:categoryid,
+                      path:'/'
+                })
+
+          }).catch((err) => {
+                console.log(err)
+                  })
+
+
 }
 
 
 //_______________________________________  TÜM HEPSİ ________________________
 exports.getProducts = (req,res,next) => {
       const categoryid = req.params.categoryid
-      const all_products = Product.getAll()
       const categories = Category.getAll()
 
+      Product.getAll()
+          .then( all_products => {
+                res.render('../views/shop/products.ejs', {
+                      my_title:'Products Page',
+                      products:all_products[0],
+                      categories:categories,
+                      selectedCategory:categoryid,
+                      path:'/products'
+                })
 
-      res.render('../views/shop/products.ejs', {
-            my_title:'Products Page',
-            products:all_products,
-            categories:categories,
-            selectedCategory:categoryid,
-            path:'/products'
-      
-      })
+          }).catch((err) => {
+                console.log(err)
+              })
+
 }
 
 //_______________________________________  KATEGORİYE GÖRE GETİR ________________________
