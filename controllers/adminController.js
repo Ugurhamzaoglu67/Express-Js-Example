@@ -56,19 +56,26 @@ exports.getAddProduct = (req,res,next) => {
 
 //_______________________________________  getEditProduct ________________________
 exports.getEditProduct = (req,res,next) => {
-    const product = Product.getById(req.params.productid)
     const categories = Category.getAll()
     const categoryid = Number(req.params.categoryid)
 
+    Product.getById(req.params.productid)
+        .then((product) => {
+            res.render('admin/edit-product',{
+                my_title:'Ürün Düzenle',
+                categories:categories,
+                selectedCategory:categoryid,
+                path:'/admin/products',
+                product:product[0][0]
 
-      res.render('../views/admin/edit-product',{
-            my_title:'Ürün Düzenle',
-            categories:categories,
-            selectedCategory:categoryid,
-            path:'/admin/products',
-            product:product
+            })
+        }).catch((err) => {
+            console.log(err)
+    })
 
-       })
+
+
+
  
  }
 //_______________________________________  postEditProduct ________________________

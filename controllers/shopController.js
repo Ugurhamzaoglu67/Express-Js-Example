@@ -70,19 +70,27 @@ exports.getProductsByCategoryId = (req,res) => {
 
 //_______________________________________  DETAY / TEK ÜRÜN( ID ) ________________________
 exports.getProduct = (req,res) => {
-      const categoryid = Number(req.params.categoryid)
-     const product = Product.getById(req.params.productid)
+        const categoryid = Number(req.params.categoryid)
+        // const product = Product.getProductsByCategoryId(categoryid.toString())
+        const categories  = Category.getAll()
 
-    // const product = Product.getProductsByCategoryId(categoryid.toString())
-      const categories  = Category.getAll()
+        Product.getById(req.params.productid)
+            .then((product) => {
+                console.log(product[0][0])
 
-      res.render('../views/shop/product-detail.ejs', {
-            my_title:product.name,
-            product:product,
-            categories : categories,
-            selectedCategory:categoryid,
-            path:'/products'
-      })
+                res.render('shop/product-detail.ejs', {
+                    my_title:product[0][0].name,
+                    product:product[0][0], //objenin kendisi, dizi olmadan gelir -> [0][0] ile..
+                    categories : categories,
+                    selectedCategory:categoryid,
+                    path:'/details'
+                })
+
+            }).catch((err) => {
+                console.log(err)
+        })
+
+
 
 }
 

@@ -24,3 +24,7 @@
 .card-my-size:hover {
       transform: scale(1.02);
 }
+
+.bg-blue-color {
+      background-color: #c3dfee;
+}

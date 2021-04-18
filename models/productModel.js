@@ -24,7 +24,8 @@ module.exports = class Product{
 
 
       static getById(id) {
-           //Geriye tek bir ürün döndürüyor..
+           return connection.execute('SELECT * FROM products WHERE products.id=?',[id])
+
 
       }
 
