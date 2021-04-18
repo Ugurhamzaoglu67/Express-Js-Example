@@ -19,8 +19,6 @@ exports.getProducts = (req,res,next) => {
         }).catch((err) => {
             console.log(err)
              })
-
-
 }
 
 //_______________________________________  getAddProduct ________________________
@@ -28,38 +26,62 @@ exports.getAddProduct = (req,res,next) => {
 
         const categoryid = Number(req.params.categoryid)
 
-       Category.getAll()
-           .then((categories) => {
-               res.render('../views/admin/add-product',{
-                   my_title:'Yeni Ürün',
-                   categories:categories[0],
-                   selectedCategory:categoryid,
-                   path:'/admin/add-product'
+        res.render('../views/admin/add-product',{
+            my_title:'Yeni Ürün',
+            //categories:categories[0],
+            //selectedCategory:categoryid,
+            path:'/admin/add-product'
 
-               })
-           }).catch((err) => {
-               console.log(err)
-       })
+        })
  
  }
 //_______________________________________  postAddProduct ________________________
  exports.postAddProduct = (req,res,next)=> {
 
-        const product = new Product()
+        const name = req.body.name
+        const price = req.body.price
+        const imageUrl = req.body.imageUrl
+        const description = req.body.description
 
-        product.name = req.body.name
-        product.price = req.body.price
-        product.categoryid = req.body.categoryid
-        product.imageUrl = req.body.imageUrl
-        product.description = req.body.description
-
-        product.saveProduct()
+        /* 1.YÖNTEM ÜRÜN EKLEME
+        Product.create({
+            name:name,
+            price:price,
+            imageUrl:imageUrl,
+            description:description
+        })
             .then((result) => {
-                res.redirect('/')
-                console.log("Ürün ekleme başarılı...")
-            }).catch((err) => {
+                console.log(result)
+            })
+            .catch((err) => {
                 console.log(err)
+            })
+
+        */
+
+       // const categoryid = req.body.categoryid
+
+
+        /*2.YÖNTEM */
+
+         const prd = Product.build({
+             name:name,
+             price:price,
+             imageUlr:imageUrl,
+             description:description
+         })
+
+         prd.save()
+             .then((result) => {
+                 console.log(result)
+                 res.redirect('/')
              })
+             .catch((err) => {
+                 console.log(err)
+             })
+
+
+
 
 }
 
@@ -97,7 +119,6 @@ exports.getEditProduct = (req,res,next) => {
  exports.postEditProduct = (req,res,next)=> {
 
        const product = new Product()
-
         product.id = req.body.id
         product.name = req.body.name
         product.price = req.body.price

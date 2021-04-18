@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../utility/database')
 
-
 //Uygulamadaki model = Db tabloları
 
 const Product = sequelize.define('product', {
