@@ -146,21 +146,41 @@ exports.getEditProduct = (req,res,next) => {
 }
 
 
-
-
 exports.postDeleteProduct = (req,res) => {
 
-      Product.DeleteById(req.body.productid)
-          .then((product) => {
 
-              res.redirect('/admin/products?action=delete')
-              console.log(`Silme başarılı. Silinen ID : ${req.body.productid}`)
+        const id = req.body.productid
+
+        //2.yöntem
+        Product.findByPk(id)
+            .then( product => { //Bize product gelecek
+               return product.destroy()
+            })
+            .then((result) => {
+                console.log("Product has been deleted")
+                res.redirect('/admin/products?action=delete')
+            })
+
+            .catch((err) => {
+                console.log(err)
+            })
 
 
-          })
-          .catch((err) => {
-              console.log(err)
-          })
+
+        // 1.yöntem
+        // Product.destroy(
+        //     {
+        //         where:{id:id}
+        //     }
+        // )
+        //     .then(()=> {
+        //         res.redirect('/admin/products?action=delete')
+        //         console.log(`Silme başarılı. Silinen ID : ${id}`)
+        //     })
+        //     .catch((err) => {
+        //         console.log(err)
+        //     })
+
 
 
 
