@@ -19,15 +19,26 @@ app.use(express.urlencoded({ extended: true }))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+//Middleware
+
+app.use((req,res,next) => {
+    User.findByPk(1)
+        .then((user) => {
+            req.user = user //kullanıcı bilgileri request objesinin içinde her istekte tutulcak
+            next()
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+})
+
 
 //______________________________ routes ___________________________________
 app.use('/admin',adminRoutes);
 app.use(shopRoutes);
-
 app.use(errorsController.get404Page);
 
 //_____________ Db İlişkileri_______________________________________
-
 Product.belongsTo(Category, {
     foreignKey: {
         allowNull:false
@@ -45,14 +56,14 @@ User.hasMany(Product) //1 user sınırsız Ürün
 
 // _________________ sequelize ___________________________________
 sequelize
-    .sync({force:true}) //Tabloları ilk başta drop et, yeni yapıya göre oluştur.
-    //.sync()
+    //.sync({force:true}) //Tabloları ilk başta drop et, yeni yapıya göre oluştur.
+    .sync()
     .then(() => {
 
         User.findByPk(1)
             .then((user) => {
                 if(!user) {
-                    User.create({
+                   return  User.create({
                         name:'Ugur hmz',
                         email:'test@gmail.com'
                     })
