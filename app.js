@@ -10,6 +10,8 @@ const sequelize = require('./utility/database')
 const Category = require('./models/categoryModel')
 const Product = require('./models/productModel')
 const User = require('./models/userModel')
+const Cart = require('./models/cartModel')
+const CartItem = require('./models/cartItemModel')
 
 //_________________________________________________________________
 
@@ -20,7 +22,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 //Middleware
-
 app.use((req,res,next) => {
     User.findByPk(1)
         .then((user) => {
@@ -52,12 +53,18 @@ Product.belongsTo(User) //1-ürün sadece 1 kullanıcı tarafından
 User.hasMany(Product) //1 user sınırsız Ürün
 
 
+User.hasOne(Cart)
+Cart.belongsTo(User)
+
+
+Cart.belongsToMany(Product, {through : CartItem})
+Product.belongsToMany(Cart, {through : CartItem})
 
 
 // _________________ sequelize ___________________________________
 sequelize
-    //.sync({force:true}) //Tabloları ilk başta drop et, yeni yapıya göre oluştur.
-    .sync()
+    .sync({force:true}) //Tabloları ilk başta drop et, yeni yapıya göre oluştur.
+    //.sync()
     .then(() => {
 
         User.findByPk(1)
