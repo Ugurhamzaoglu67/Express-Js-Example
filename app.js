@@ -9,7 +9,7 @@ const sequelize = require('./utility/database')
 
 const Category = require('./models/categoryModel')
 const Product = require('./models/productModel')
-
+const User = require('./models/userModel')
 
 //_________________________________________________________________
 
@@ -36,22 +36,45 @@ Product.belongsTo(Category, {
 }) //1 ürün -> 1 kategoriye ait
 Category.hasMany(Product) // 1 Kategori -> Çokça ürüne ait
 
+
+Product.belongsTo(User) //1-ürün sadece 1 kullanıcı tarafından
+User.hasMany(Product) //1 user sınırsız Ürün
+
+
+
+
 // _________________ sequelize ___________________________________
 sequelize
-    //.sync({force:true}) //Tabloları ilk başta drop et, yeni yapıya göre oluştur.
-    .sync()
+    .sync({force:true}) //Tabloları ilk başta drop et, yeni yapıya göre oluştur.
+    //.sync()
     .then(() => {
-        Category.count()
-            .then( count => {
-                if(count === 0){
-                    Category.bulkCreate([
-                        {name:'Telefon',description:'Telefon Kategorisi'},
-                        {name:'Bilgisayarlar',description:'Laptop & Masa Üstü Bilgisayarlar'},
-                        {name:'Beyaz Eşyalar', description:'Adan z ye Beyaz eşyalar'},
-                        {name:'Elektronik', description:'Elektronik Aletler'}
-                    ])
+
+        User.findByPk(1)
+            .then((user) => {
+                if(!user) {
+                    User.create({
+                        name:'Ugur hmz',
+                        email:'test@gmail.com'
+                    })
                 }
-            })
+
+                return user
+
+            }).then((user) => {
+
+                    Category.count()
+                        .then( count => {
+                            if(count === 0){
+                                Category.bulkCreate([
+                                    {name:'Telefon',description:'Telefon Kategorisi'},
+                                    {name:'Bilgisayarlar',description:'Laptop & Masa Üstü Bilgisayarlar'},
+                                    {name:'Beyaz Eşyalar', description:'Adan z ye Beyaz eşyalar'},
+                                    {name:'Elektronik', description:'Elektronik Aletler'}
+                                ])
+                            }
+                        })
+                })
+
     })
     .catch((err) => {
           console.log(err)
