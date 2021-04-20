@@ -61,22 +61,29 @@ exports.getProducts = (req,res,next) => {
 
 //_______________________________________  KATEGORİYE GÖRE GETİR ________________________
 exports.getProductsByCategoryId = (req,res) => {
-      const categoryid = Number(req.params.categoryid)
-      const all_products = Product.getProductsByCategoryId(categoryid.toString())
-      const categories  = Category.getAll()
+        const categoryid = Number(req.params.categoryid)
+        const model = []
 
+        Category.findAll()
+            .then((categories) => {
+                model.categories = categories
+                const category = categories.find(i=> i.id == categoryid)
+                return category.getProducts()//istenilen category üzerinden -> ona ait product'ları al.
 
-      res.render('../views/shop/products.ejs', {
-            my_title:'Products',
-            products:all_products,
-            categories : categories,
-            selectedCategory:categoryid,
-            path:'/products'
+            })
+            .then((products) => { //returnden geleni products olarak karşılıyoruz
+                res.render('../views/shop/products.ejs', {
+                    my_title:'Products',
+                    products:products,
+                    categories : model.categories,
+                    selectedCategory:categoryid,
+                    path:'/products'
 
-      })
-
-
-      console.log(typeof categoryid)
+                })
+            })
+            .catch((err) => {
+                console.log(err)
+            })
 
 }
 

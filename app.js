@@ -7,6 +7,10 @@ const bodyParser = require("body-parser");
 
 const sequelize = require('./utility/database')
 
+const Category = require('./models/categoryModel')
+const Product = require('./models/productModel')
+
+
 //_________________________________________________________________
 
 app.set('view engine','ejs')
@@ -22,10 +26,32 @@ app.use(shopRoutes);
 
 app.use(errorsController.get404Page);
 
-//______________________________ sequelize ___________________________________
-sequelize.sync()
-    .then((result) => {
-          console.log(result)
+//_____________ Db İlişkileri_______________________________________
+
+Product.belongsTo(Category, {
+    foreignKey: {
+        allowNull:false
+    }
+
+}) //1 ürün -> 1 kategoriye ait
+Category.hasMany(Product) // 1 Kategori -> Çokça ürüne ait
+
+// _________________ sequelize ___________________________________
+sequelize
+    //.sync({force:true}) //Tabloları ilk başta drop et, yeni yapıya göre oluştur.
+    .sync()
+    .then(() => {
+        Category.count()
+            .then( count => {
+                if(count === 0){
+                    Category.bulkCreate([
+                        {name:'Telefon',description:'Telefon Kategorisi'},
+                        {name:'Bilgisayarlar',description:'Laptop & Masa Üstü Bilgisayarlar'},
+                        {name:'Beyaz Eşyalar', description:'Adan z ye Beyaz eşyalar'},
+                        {name:'Elektronik', description:'Elektronik Aletler'}
+                    ])
+                }
+            })
     })
     .catch((err) => {
           console.log(err)

@@ -25,6 +25,7 @@ exports.getProducts = (req,res,next) => {
 exports.getAddProduct = (req,res,next) => {
 
         const categoryid = Number(req.params.categoryid)
+
         Category.findAll()
             .then((categories) => {
                 res.render('../views/admin/add-product',{
@@ -46,39 +47,26 @@ exports.getAddProduct = (req,res,next) => {
         const price = req.body.price
         const imageUrl = req.body.imageUrl
         const description = req.body.description
+        const categoryid = req.body.categoryid
 
-        /* 1.YÖNTEM ÜRÜN EKLEME
         Product.create({
             name:name,
             price:price,
             imageUrl:imageUrl,
-            description:description
+            description:description,
+            categoryId:categoryid
         })
             .then((result) => {
-                console.log(result)
+                console.log("Ekleme başarılı....")
+                res.redirect('/')
             })
             .catch((err) => {
                 console.log(err)
             })
 
-        */
-       // const categoryid = req.body.categoryid
-        /*2.YÖNTEM */
-         const prd = Product.build({
-             name:name,
-             price:price,
-             imageUrl:imageUrl,
-             description:description
-         })
 
-         prd.save()
-             .then((result) => {
-                 console.log("Ürün ekleme başarılı..")
-                 res.redirect('/')
-             })
-             .catch((err) => {
-                 console.log(err)
-             })
+
+
 
 }
 
@@ -131,11 +119,11 @@ exports.getEditProduct = (req,res,next) => {
                 product.price = price
                 product.description = description
                 product.imageUrl = imageUrl
-                product.categoryid = categoryid
+                product.categoryId= categoryid
 
                 return product.save() //Obje güncellenir.
             })
-            .then(result => {
+            .then(() => {
 
                 console.log("Güncelleme başarılı")
                 res.redirect('/admin/products?action=edit')
