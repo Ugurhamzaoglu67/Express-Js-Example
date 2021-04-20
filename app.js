@@ -62,6 +62,7 @@ Product.belongsToMany(Cart, {through : CartItem})
 
 
 // _________________ sequelize ___________________________________
+let _user;
 sequelize
     .sync({force:true}) //Tabloları ilk başta drop et, yeni yapıya göre oluştur.
     //.sync()
@@ -78,7 +79,21 @@ sequelize
 
                 return user
 
-            }).then((user) => {
+            })
+            .then((user) => {
+                    _user = user
+                    return user.getCart()
+             })
+            .then((cart) => {
+                 if(!cart) {
+                    return _user.createCart()
+                 }
+
+                 return cart
+             })
+
+
+            .then((user) => {
 
                     Category.count()
                         .then( count => {

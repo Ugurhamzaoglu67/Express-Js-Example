@@ -14,6 +14,7 @@ router.get('/categories/:categoryid',shopController.getProductsByCategoryId)
 router.get('/products',shopController.getProducts)
 //router.get('/details',shopController.getProductDetails)
 router.get('/cart',shopController.getCart)
+router.post('/cart',shopController.postCart)
 router.get('/orders',shopController.getOrders)
 
 

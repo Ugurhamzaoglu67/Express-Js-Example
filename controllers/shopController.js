@@ -124,11 +124,69 @@ exports.getProduct = (req,res) => {
 
 //_______________________________________  KART  _________________________________
 exports.getCart = (req,res) => {
-      res.render('../views/shop/cart', {
-            my_title:'Cart Page',
-            path:'/cart'
-      })
+
+        req.user.getCart()
+            .then( cart => {
+                return cart.getProducts()
+                    .then((products) => {
+                        res.render('../views/shop/cart', {
+                            my_title:'Cart Page',
+                            path:'/cart',
+                            products:products
+                        })
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            })
+            .catch(err => {
+                console.log(err)
+            })
 }
+
+exports.postCart = (req,res) => {
+
+        const productId = req.body.productId
+        let quantity = 1
+        let userCart
+
+        req.user.getCart()
+            .then( cart => {
+                userCart = cart
+                return cart.getProducts( { where : {id:productId}})
+            })
+            .then(products => {
+                let product
+
+                if(products.length > 0){
+                    product = products[0]
+                }
+
+                if(product) {
+                    quantity += product.cartItem.quantity
+                    return product
+                }
+
+                return Product.findByPk(productId)
+
+            })
+            .then( product => {
+                    userCart.addProduct(product,{
+                        through:{
+                            quantity:quantity
+                        }
+                    })
+            })
+            .then(() => {
+                res.redirect('/cart')
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
+}
+
+
 
 //_______________________________________  SİPARİŞLERİ GETİR  _________________________________
 exports.getOrders = (req,res) => {
