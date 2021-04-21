@@ -165,7 +165,7 @@ exports.postCart = (req,res) => {
                     product = products[0]
                 }
 
-                if(product) {
+               if(product) {
                     quantity += product.cartItem.quantity
                     return product
                 }
@@ -180,7 +180,7 @@ exports.postCart = (req,res) => {
                         }
                     })
             })
-            .then(() => {
+            .then( (result) => {
                 res.redirect('/cart')
             })
             .catch(err => {
@@ -188,6 +188,29 @@ exports.postCart = (req,res) => {
             })
 
 }
+
+//_______________________________________  KARTTAN Sİl  _________________________________
+
+exports.postCartItemDelete = (req,res) => {
+        const productid = req.body.productid
+        req.user.getCart() //Usere bağlı olan o 'anki kartı aldık
+
+            .then( cart => {
+                return cart.getProducts( {where : {id : productid }})  //Bu kartlar arasından-> seçmiş olduğumu bir sonraki thene
+
+            }) //Kart bilgisini then'de karşıladık
+
+            .then(products => {
+                const product = products[0]
+                return product.cartItem.destroy()
+
+            })
+            .then((result) => {
+                res.redirect('/cart')
+            })
+
+}
+
 
 
 
@@ -199,8 +222,4 @@ exports.getOrders = (req,res) => {
             path:'/orders'
       })
 }
-
-
-
-
 
