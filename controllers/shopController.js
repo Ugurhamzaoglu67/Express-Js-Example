@@ -125,14 +125,17 @@ exports.getProduct = (req,res) => {
 //_______________________________________  KART  _________________________________
 exports.getCart = (req,res) => {
 
-        req.user.getCart()
+        req.user
+            .getCart()
             .then( cart => {
                 return cart.getProducts()
                     .then((products) => {
-                        res.render('../views/shop/cart', {
+                        console.log(products)
+                        res.render('shop/cart', {
                             my_title:'Cart Page',
                             path:'/cart',
-                            products:products
+                            products:products,
+
                         })
                     })
                     .catch(err => {

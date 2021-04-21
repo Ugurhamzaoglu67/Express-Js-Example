@@ -64,8 +64,8 @@ Product.belongsToMany(Cart, {through : CartItem})
 // _________________ sequelize ___________________________________
 let _user;
 sequelize
-    .sync({force:true}) //Tabloları ilk başta drop et, yeni yapıya göre oluştur.
-    //.sync()
+    //.sync({force:true}) //Tabloları ilk başta drop et, yeni yapıya göre oluştur.
+    .sync()
     .then(() => {
 
         User.findByPk(1)
