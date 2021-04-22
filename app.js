@@ -12,6 +12,10 @@ const Product = require('./models/productModel')
 const User = require('./models/userModel')
 const Cart = require('./models/cartModel')
 const CartItem = require('./models/cartItemModel')
+const Order = require('./models/orderModel')
+const OrderItem = require('./models/orderItemModel')
+
+
 
 //_________________________________________________________________
 
@@ -60,13 +64,19 @@ Cart.belongsTo(User)
 Cart.belongsToMany(Product, {through : CartItem})
 Product.belongsToMany(Cart, {through : CartItem})
 
+Order.belongsTo(User)
+User.hasMany(Order)
+
+Order.belongsToMany(Product, {through:OrderItem}) //Çoka çok ilişki
+Product.belongsToMany(Order, {through:OrderItem}) //through-> 2 tablo arasında ilişki kurar
+
 
 // _________________ sequelize ___________________________________
 let _user;
 sequelize
     //.sync({force:true}) //Tabloları ilk başta drop et, yeni yapıya göre oluştur.
     .sync()
-    .then(() => {
+    .then(() =>  {
 
         User.findByPk(1)
             .then((user) => {
@@ -91,8 +101,6 @@ sequelize
 
                  return cart
              })
-
-
             .then((user) => {
 
                     Category.count()
