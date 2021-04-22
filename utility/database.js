@@ -1,13 +1,24 @@
 require('dotenv').config()
-const Sequelize = require('sequelize')
+const mongodb = require('mongodb')
+const MongoClient = mongodb.MongoClient
 
 const my_pw = process.env.PASSWORD
 
-const sequelize = new Sequelize('node-app','root',my_pw,{
-    host:'127.0.0.1',
-    dialect:'mysql'
-})
-
-module.exports = sequelize
 
 
+const mongoConnect = (callback) => {
+    MongoClient.connect(`mongodb+srv://craxx3131:${my_pw}@btkapp.in0gt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`)
+        .then(client => {
+            console.log("Bağlantı başarılı...")
+
+            callback(client)
+        })
+        .catch((err) => {
+            console.log(err)
+            throw err
+        })
+
+
+}
+
+module.exports = mongoConnect
