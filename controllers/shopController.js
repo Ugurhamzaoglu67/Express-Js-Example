@@ -88,7 +88,6 @@ exports.getProductsByCategoryId = (req,res) => {
 }
 
 
-
 //_______________________________________  DETAY / TEK ÜRÜN( ID ) ________________________
 exports.getProduct = (req,res) => {
         const categoryid = Number(req.params.categoryid)
@@ -212,15 +211,30 @@ exports.postCartItemDelete = (req,res) => {
 }
 
 
-
-
 //_______________________________________  SİPARİŞLERİ GETİR  _________________________________
 exports.getOrders = (req,res) => {
+
+
+
+
+
       
-      res.render('../views/shop/orders.ejs', {
+    req.user.getOrders({ include : ['products']}) //Bana ilişkili olan productlarıda getir
+        .then(orders => {
+            console.log(orders)
+            
+        res.render('../views/shop/orders.ejs', {
             my_title:'Orders Page',
-            path:'/orders'
-      })
+            path:'/orders',
+            orders:orders,
+
+            })
+
+
+        }).catch(err => {
+            console.log(err)
+        })
+
 }
 
 exports.postOrder = (req,res) => {
