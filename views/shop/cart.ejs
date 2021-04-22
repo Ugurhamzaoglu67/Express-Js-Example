@@ -80,7 +80,9 @@
                   </table>
                     <div class="text-center">
                           <a href="/" class="btn btn-outline-info">Alış verişe devam et</a>
-                          <a href="/checkout" class="btn btn-primary ms-2">Alış-verişi tamamla</a>
+                          <form action="/create-order" method="POST">
+                                <button href="/checkout" class="btn btn-primary ms-2">Alış-verişi tamamla</button>
+                          </form>
                     </div>
             <% } else { %>
 
