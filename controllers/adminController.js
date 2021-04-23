@@ -16,6 +16,7 @@ exports.getProducts = (req,res,next) => {
             })
 
 
+
         }).catch((err) => {
             console.log(err)
              })
