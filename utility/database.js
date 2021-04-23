@@ -4,14 +4,17 @@ const MongoClient = mongodb.MongoClient
 
 const my_pw = process.env.PASSWORD
 
-
+let _db
 
 const mongoConnect = (callback) => {
-    MongoClient.connect(`mongodb+srv://craxx3131:${my_pw}@btkapp.in0gt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`)
+       // MongoClient.connect('mongodb://localhost/node-app')
+    MongoClient.connect(`mongodb+srv://craxx3131:${my_pw}@btkapp.in0gt.mongodb.net/node-appDB?retryWrites=true&w=majority`)
         .then(client => {
             console.log("Bağlantı başarılı...")
+            _db = client.db()
 
-            callback(client)
+            callback()
+
         })
         .catch((err) => {
             console.log(err)
@@ -21,4 +24,15 @@ const mongoConnect = (callback) => {
 
 }
 
-module.exports = mongoConnect
+const getDb = () => {
+    if(_db){
+            return _db
+    }else {
+        throw 'Veri tabanı yok'
+    }
+}
+
+
+
+exports.mongoConnect = mongoConnect
+exports.getDb = getDb

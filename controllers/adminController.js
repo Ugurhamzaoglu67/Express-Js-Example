@@ -1,5 +1,5 @@
 const Product = require('../models/productModel')
-const Category = require('../models/categoryModel')
+//const Category = require('../models/categoryModel')
 
 
 //_______________________________________  getProducts ________________________
@@ -23,23 +23,13 @@ exports.getProducts = (req,res,next) => {
 
 //_______________________________________  getAddProduct ________________________
 exports.getAddProduct = (req,res,next) => {
+    res.render('../views/admin/add-product',{
+        my_title:'Yeni Ürün',
 
-        const categoryid = Number(req.params.categoryid)
-
-        Category.findAll()
-            .then((categories) => {
-                res.render('../views/admin/add-product',{
-                    my_title:'Yeni Ürün',
-                    categories:categories,
-                    selectedCategory:categoryid,
-                    path:'/admin/add-product'
-
-                })
-            }).catch((err) => {
-            console.log(err)
-        })
+        path:'/admin/add-product'
  
- }
+ })
+}
 //_______________________________________  postAddProduct ________________________
  exports.postAddProduct = (req,res,next)=> {
 
@@ -47,27 +37,17 @@ exports.getAddProduct = (req,res,next) => {
         const price = req.body.price
         const imageUrl = req.body.imageUrl
         const description = req.body.description
-        const categoryid = req.body.categoryid
-        const user = req.user
 
-        user.createProduct({
-            name:name,
-            price:price,
-            imageUrl:imageUrl,
-            description:description,
-            categoryId:categoryid,
+        const product = new Product(name,price,description,imageUrl)
 
-        })
-            .then((result) => {
-                console.log("Ekleme başarılı....")
-                res.redirect('/')
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-
-
-
+            product.save()
+                .then((result) => {
+                    console.log("Ekleme başarılı....")
+                    res.redirect('/admin/products')
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
 
 
 }
