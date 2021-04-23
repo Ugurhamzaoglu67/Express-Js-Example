@@ -22,7 +22,7 @@
       <form action="/admin/products" method="post">
 
 
-            <input type="hidden" name="id" value="<%= product.id%>" >
+            <input type="hidden" name="id" value="<%= product._id%>" >
 
             <div class="row mb-3">
                   <label for="productname" class="col-sm-2 col-form-label">Product Name</label>
@@ -40,21 +40,21 @@
                         <input type="text" class="form-control" id="productImage" name="imageUrl" value="<%=product.imageUrl%>">
                   </div>
 
-                  <label for="categoryid" class="col-sm-2 col-form-label">Category</label>
-                  <div class="col-sm-10 mb-3">
-                        <select  class="form-select " id="categoryid" name="categoryid" aria-label=".form-select example">
-                              <option  value="-1">Select Category</option>
-                              <% categories.forEach((category) => {%>
-                                    <option
-                                            <% if ( category.id == product.categoryId) {%>
-                                            selected
-                                            <% }%>
+<!--                  <label for="categoryid" class="col-sm-2 col-form-label">Category</label>-->
+<!--                  <div class="col-sm-10 mb-3">-->
+<!--                        <select  class="form-select " id="categoryid" name="categoryid" aria-label=".form-select example">-->
+<!--                              <option  value="-1">Select Category</option>-->
+<!--                              <%# categories.forEach((category) => {%>-->
+<!--                                    <option-->
+<!--                                            <%# if ( category.id == product.categoryId) {%>-->
+<!--                                            selected-->
+<!--                                            <%# }%>-->
 
-                                            value="<%= category.id %>"><%=category.name%></option>
-                              <% })%>
-                        </select>
+<!--                                            value="<%#= category.id %>"><%#=category.name%></option>-->
+<!--                              <%# })%>-->
+<!--                        </select>-->
 
-                  </div>
+<!--                  </div>-->
 
 
 

@@ -55,34 +55,28 @@ exports.getAddProduct = (req,res,next) => {
 
 //_______________________________________  getEditProduct ________________________
 exports.getEditProduct = (req,res,next) => {
+    console.log(req.params.productid)
+    Product.findById(req.params.productid)
+        // .then(products => {
+        //     console.log(products[0])
+        //     res.render('admin/edit-product', {
+        //         my_title: 'Ürün Düzenle',
+        //         path: '/admin/products',
+        //         product: products[0] 1. Yöntem için geçerliydi
+        //     })
+        // })
 
-    const categoryid = Number(req.params.categoryid)
-
-    Product.findByPk(req.params.productid)
-        .then((product) => {
-
-            if(!product){
-                return res.redirect('/')
-            }
-            Category.findAll()
-                .then((categories) => {
-                    res.render('admin/edit-product',{
-                        my_title:'Ürün Düzenle',
-                        categories:categories,
-                        selectedCategory:categoryid,
-                        path:'/admin/products',
-                        product:product
-                })
-                })
-                .catch((err) => {
-                    console.log(err)
+        //2.YÖNTEM İÇİN
+        .then(product => {
+            res.render('admin/edit-product', {
+                        my_title: 'Ürün Düzenle',
+                        path: '/admin/products',
+                        product: product
                      })
-
-                })
-                .catch((err) => {
-                    console.log(err)
-                    })
-
+         })
+        .catch(err => {
+            console.log(err)
+        })
  }
 
 

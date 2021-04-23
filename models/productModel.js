@@ -1,4 +1,5 @@
 const getDb = require('../utility/database.js').getDb
+const mongoDb =  require('mongodb')
 
 class Product {
 
@@ -33,7 +34,31 @@ class Product {
               .catch((err) => {
                   console.log(err)
               })
+        }
+
+      static findById(productid) {
+          const db = getDb()
+          // return db.collection('products').find({_id: new mongoDb.ObjectID(productid)}).toArray()
+          //     .then((products) => {
+          //         return products
+          //     })
+          //     .catch(err => {
+          //         console.log(err)
+          //     })
+
+          //2. Yöntem
+          return db.collection('products')
+              .findOne({_id: new mongoDb.ObjectID(productid)})
+              .then(product =>{
+                  return product
+              })
+              .catch(err => {
+                  console.log(err)
+              })
+
       }
+
+
 
 }
 
