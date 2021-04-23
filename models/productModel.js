@@ -36,8 +36,6 @@ class Product {
 
 
 
-
-
       static findAll() {
           const db = getDb()
           return db.collection('products') //PROMISE GÖNDERMEYİ UNUTMA!!!!!! return
@@ -72,6 +70,19 @@ class Product {
                   console.log(err)
               })
 
+      }
+
+
+      static deleteById(productid) {
+          const db = getDb()
+          return db.collection('products')
+              .deleteOne({_id: new mongoDb.ObjectID(productid)})
+              .then(() => {
+                  console.log('Silme işlemi başarılı ve silinen ürün id# : '+productid)
+              })
+              .catch(err => {
+                  console.log(err)
+              })
       }
 
 
