@@ -3,25 +3,40 @@ const mongoDb =  require('mongodb')
 
 class Product {
 
-      constructor(name, price, description, imageUrl) {
-                  this.name = name
-                  this.price = price
-                  this.description = description
-                  this.imageUrl = imageUrl
+      constructor(name, price, description, imageUrl,id) {
+                this.name = name
+                this.price = price
+                this.description = description
+                this.imageUrl = imageUrl
+                this._id = id ? new mongoDb.ObjectID(id) : null  //id true ise -> obje üret, yoksa null ver
       }
 
       save() {
-            const db = getDb()
-            return db.collection('products')
-                .insertOne(this)
+            let db = getDb()
+
+            if(this._id){ //id varsa demekki güncelleme işlemi yapıyoruz
+
+                db = db.collection('products').updateOne({_id : this._id}, { $set:this })
+
+            }
+            else {      //id yoksa güncelleme işlemi yapıyoruz.
+                db = db.collection('products').insertOne(this)
+            }
+
+            return db
                 .then(result => {
-                      console.log(result)
+                    console.log(result)
                 })
+
                 .catch(err => {
-                      console.log(err)
+                    console.log(err)
                 })
 
       }
+
+
+
+
 
       static findAll() {
           const db = getDb()

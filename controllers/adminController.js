@@ -88,18 +88,11 @@ exports.getEditProduct = (req,res,next) => {
         const price = req.body.price
         const description = req.body.description
         const imageUrl = req.body.imageUrl
-        const categoryid = req.body.categoryid
+       // const categoryid = req.body.categoryid
 
-        Product.findByPk(id)
-            .then((product) => {
-                product.name = name
-                product.price = price
-                product.description = description
-                product.imageUrl = imageUrl
-                product.categoryId= categoryid
+       const product = new Product(name, price,description, imageUrl,id)
 
-                return product.save() //Obje güncellenir.
-            })
+           product.save()
             .then(() => {
 
                 console.log("Güncelleme başarılı")
