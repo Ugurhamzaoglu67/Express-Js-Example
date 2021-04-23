@@ -27,6 +27,7 @@ class Product {
           const db = getDb()
           return db.collection('products') //PROMISE GÖNDERMEYİ UNUTMA!!!!!! return
               .find()
+              .project({description:0}) //Elimize description harici tüm olanları getir.
               .toArray() //Bütün productsları çektik , diziye çevirdik. Dizide bize promise döndürüyor
               .then(products => {
                   return products

@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const adminRoutes= require('./routes/adminRoutes')
-//const shopRoutes = require('./routes/shopRoutes')
+const shopRoutes = require('./routes/shopRoutes')
 
 const errorsController = require('./controllers/errors')
 const bodyParser = require("body-parser");
@@ -18,9 +18,9 @@ app.use(bodyParser.json())
 
 
 //______________________________ routes ___________________________________
- app.use('/admin',adminRoutes);
-// app.use(shopRoutes);
-// app.use(errorsController.get404Page);
+app.use('/admin',adminRoutes);
+app.use(shopRoutes);
+app.use(errorsController.get404Page);
 
 mongoConnect(() => {
       app.listen(3000)

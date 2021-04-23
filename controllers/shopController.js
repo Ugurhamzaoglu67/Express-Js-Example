@@ -1,28 +1,18 @@
 const Product = require('../models/productModel')
-const Category = require('../models/categoryModel')
+//const Category = require('../models/categoryModel')
 
 //_______________________________________  ANASAYFA ________________________
 exports.getIndex = (req,res,next) => {
       const categoryid = req.params.categoryid
 
 
-      Product.findAll(
-          {
-              attributes : ['id','name','price','imageUrl'],
-          })
+      Product.findAll()
           .then( products => {
-                Category.findAll()
-                    .then((categories) => {
-                      res.render('../views/shop/index.ejs', {
-                          my_title:'Shopping',
-                          products:products,
-                          categories:categories,
-                          selectedCategory:categoryid,
-                          path:'/'
-                      })
-              }).catch((err) => {
-                    console.log(err)
-                })
+              res.render('../views/shop/index.ejs', {
+                  my_title:'Shopping',
+                  products:products,
+                  path:'/'
+              })
 
           }).catch((err) => {
                 console.log(err)
@@ -35,24 +25,13 @@ exports.getProducts = (req,res,next) => {
       const categoryid = req.params.categoryid
 
 
-      Product.findAll(
-          {
-              attributes : ['id','name','price','imageUrl'],
-          })
+      Product.findAll()
           .then( all_products => {
-                Category.findAll()
-                    .then((categories) => {
-                        res.render('../views/shop/products.ejs', {
-                            my_title:'Products Page',
-                            products:all_products,
-                            categories:categories,
-                            selectedCategory:categoryid,
-                            path:'/products'
-                        })
-                    }).catch((err) => {
-                    console.log(err)
-                })
-
+              res.render('../views/shop/products.ejs', {
+                  my_title:'Products Page',
+                  products:all_products,
+                  path:'/products'
+              })
           }).catch((err) => {
                 console.log(err)
               })
@@ -90,31 +69,15 @@ exports.getProductsByCategoryId = (req,res) => {
 
 //_______________________________________  DETAY / TEK ÜRÜN( ID ) ________________________
 exports.getProduct = (req,res) => {
-        const categoryid = Number(req.params.categoryid)
-        // const product = Product.getProductsByCategoryId(categoryid.toString())
 
-
-        Product.findAll({
-            attributes : ['id','name','price','imageUrl','description'],
-            where: {id : req.params.productid}
-        })
-        .then((products) => {
-                Category.findAll()
-                    .then((categories) => {
-
-                        res.render('shop/product-detail.ejs', {
-                            my_title:products[0].name,
-                            product:products[0], //objenin kendisi, dizi olmadan gelir -> [0][0] ile..
-                            categories : categories,
-                            selectedCategory:categoryid,
-                            path:'/details'
-                        })
-                    }).catch((err) => {
-                    console.log(err)
-                })
-
+       Product.findById(req.params.productid)
+        .then((product) => {
+            res.render('shop/product-detail.ejs', {
+                my_title:product.name,
+                product:product, //objenin kendisi, dizi olmadan gelir -> [0][0] ile..
+                path:'/details'
             })
-
+        })
         .catch((err) => {
                 console.log(err)
             })
