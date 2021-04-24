@@ -45,7 +45,8 @@ exports.getAddProduct = (req,res,next) => {
                 name:name,
                 price : price,
                 description: description,
-                imageUrl : imageUrl
+                imageUrl : imageUrl,
+                userId : req.user
 
             }
         )

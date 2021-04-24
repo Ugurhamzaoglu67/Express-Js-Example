@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.use((req,res,next) => {
-        User.findOne('ugurhmz')
+        User.findOne({name:'ugurhmz'})
             .then(user => {
                 req.user = user
                 next()
