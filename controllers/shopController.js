@@ -2,11 +2,9 @@ const Product = require('../models/productModel')
 //const Category = require('../models/categoryModel')
 
 //_______________________________________  ANASAYFA ________________________
-exports.getIndex = (req,res,next) => {
-      const categoryid = req.params.categoryid
+exports.getIndex = (req,res) => {
 
-
-      Product.findAll()
+      Product.find()
           .then( products => {
               res.render('../views/shop/index.ejs', {
                   my_title:'Shopping',

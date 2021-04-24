@@ -5,7 +5,7 @@ const Product = require('../models/productModel')
 //_______________________________________  getProducts ________________________
 exports.getProducts = (req,res,next) => {
 
-    Product.findAll()
+    Product.find()
         .then((all_products) => {
             res.render('../views/admin/produtcs.ejs', {
                 my_title:'Admin Products',
@@ -39,10 +39,18 @@ exports.getAddProduct = (req,res,next) => {
         const imageUrl = req.body.imageUrl
         const description = req.body.description
 
-        const product = new Product(name,price,description,imageUrl)
+        const product = new Product(
+            {
+                name:name,
+                price : price,
+                description: description,
+                imageUrl : imageUrl
+
+            }
+        )
 
             product.save()
-                .then((result) => {
+                .then(() => {
                     console.log("Ekleme başarılı....")
                     res.redirect('/admin/products')
                 })
