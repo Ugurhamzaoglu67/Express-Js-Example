@@ -2,7 +2,7 @@ const Product = require('../models/productModel')
 //const Category = require('../models/categoryModel')
 
 
-//_______________________________________  getProducts ________________________
+//GET
 exports.getProducts = (req,res,next) => {
 
     Product.find()
@@ -22,7 +22,7 @@ exports.getProducts = (req,res,next) => {
              })
 }
 
-//_______________________________________  getAddProduct ________________________
+//GET-ADD
 exports.getAddProduct = (req,res,next) => {
     res.render('../views/admin/add-product',{
         my_title:'Yeni Ürün',
@@ -31,7 +31,8 @@ exports.getAddProduct = (req,res,next) => {
  
  })
 }
-//_______________________________________  postAddProduct ________________________
+
+//POST-ADD
  exports.postAddProduct = (req,res,next)=> {
 
         const name = req.body.name
@@ -61,7 +62,7 @@ exports.getAddProduct = (req,res,next) => {
 
 }
 
-//_______________________________________  getEditProduct ________________________
+//GET-EDIT
 exports.getEditProduct = (req,res,next) => {
 
     Product.findById(req.params.productid)
@@ -78,7 +79,7 @@ exports.getEditProduct = (req,res,next) => {
  }
 
 
-//_______________________________________  postEditProduct ________________________
+//POST-EDIT
  exports.postEditProduct = (req,res,next)=> {
 
         const id = req.body.id
@@ -128,16 +129,13 @@ exports.getEditProduct = (req,res,next) => {
  }
 
 
-
-
-
-
+//POST-DELETE
 exports.postDeleteProduct = (req,res) => {
 
         const id = req.body.productid
 
         //2.yöntem
-        Product.deleteById(id)
+        Product.findByIdAndRemove(id)
             .then(() => {
 
                 res.redirect('/admin/products?action=delete')
