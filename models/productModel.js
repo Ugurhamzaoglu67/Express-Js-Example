@@ -1,3 +1,41 @@
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+
+
+
+
+const productSchema  = new Schema({
+        name : {
+            type:String,
+            required:true
+        },
+        price : {
+            type : Number,
+            required:true
+        },
+        description : String,
+        imageUrl : String,
+        date : {
+            type:Date,
+            default : Date.now
+        }
+
+})
+
+
+module.exports = mongoose.model('Product', productSchema)
+
+
+
+
+
+
+
+
+
+
+
+/*
 const getDb = require('../utility/database.js').getDb
 const mongoDb =  require('mongodb')
 
@@ -88,5 +126,6 @@ class Product {
 
 
 }
+*/
+//module.exports = Product
 
-module.exports = Product
