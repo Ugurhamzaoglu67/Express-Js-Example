@@ -63,18 +63,8 @@ exports.getAddProduct = (req,res,next) => {
 
 //_______________________________________  getEditProduct ________________________
 exports.getEditProduct = (req,res,next) => {
-    console.log(req.params.productid)
-    Product.findById(req.params.productid)
-        // .then(products => {
-        //     console.log(products[0])
-        //     res.render('admin/edit-product', {
-        //         my_title: 'Ürün Düzenle',
-        //         path: '/admin/products',
-        //         product: products[0] 1. Yöntem için geçerliydi
-        //     })
-        // })
 
-        //2.YÖNTEM İÇİN
+    Product.findById(req.params.productid)
         .then(product => {
             res.render('admin/edit-product', {
                         my_title: 'Ürün Düzenle',
@@ -96,20 +86,50 @@ exports.getEditProduct = (req,res,next) => {
         const price = req.body.price
         const description = req.body.description
         const imageUrl = req.body.imageUrl
-       // const categoryid = req.body.categoryid
 
-       const product = new Product(name, price,description, imageUrl,id)
-
-           product.save()
+        Product.updateMany( { _id : id},{
+            $set : {
+                name: name,
+                price : price,
+                description : description,
+                imageUrl : imageUrl
+            }
+        })
             .then(() => {
-
                 console.log("Güncelleme başarılı")
                 res.redirect('/admin/products?action=edit')
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err)
             })
-}
+
+
+
+
+        /* 2. YÖNTEM id'ye GÖRE GÜNCELLEME
+        Product.findById(id)
+            .then(product => {
+                product.name = name
+                product.price = price
+                product.description = description
+                product.imageUrl = imageUrl
+
+                return product.save()
+
+            }) .then(() => {
+
+                console.log("Güncelleme başarılı")
+                res.redirect('/admin/products?action=edit')
+                 })
+                .catch((err) => {
+                    console.log(err)
+                })
+                */
+ }
+
+
+
+
 
 
 exports.postDeleteProduct = (req,res) => {
