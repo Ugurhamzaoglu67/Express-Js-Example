@@ -19,11 +19,11 @@ exports.getIndex = (req,res) => {
 }
 
 //_______________________________________  TÜM HEPSİ ________________________
-exports.getProducts = (req,res,next) => {
+exports.getProducts = (req,res) => {
       const categoryid = req.params.categoryid
 
 
-      Product.findAll()
+      Product.find()
           .then( all_products => {
               res.render('../views/shop/products.ejs', {
                   my_title:'Products Page',
@@ -68,7 +68,9 @@ exports.getProductsByCategoryId = (req,res) => {
 //_______________________________________  DETAY / TEK ÜRÜN( ID ) ________________________
 exports.getProduct = (req,res) => {
 
-       Product.findById(req.params.productid)
+       Product
+        //.findById(req.params.productid)
+           .findOne( {_id : req.params.productid} )
         .then((product) => {
             res.render('shop/product-detail.ejs', {
                 my_title:product.name,
