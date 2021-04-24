@@ -2,11 +2,14 @@ const Product = require('../models/productModel')
 //const Category = require('../models/categoryModel')
 
 
-//GET
+//GET ALL  PRODUCTS
 exports.getProducts = (req,res,next) => {
 
     Product.find()
+        .populate('userId','name -_id')
+        .select('name price imageUrl userId ')
         .then((all_products) => {
+            console.log(all_products)
             res.render('../views/admin/produtcs.ejs', {
                 my_title:'Admin Products',
                 products:all_products,
@@ -22,7 +25,7 @@ exports.getProducts = (req,res,next) => {
              })
 }
 
-//GET-ADD
+//GET ADD PRODUCT
 exports.getAddProduct = (req,res,next) => {
     res.render('../views/admin/add-product',{
         my_title:'Yeni Ürün',
@@ -32,7 +35,7 @@ exports.getAddProduct = (req,res,next) => {
  })
 }
 
-//POST-ADD
+//POST ADD PRODUCT
  exports.postAddProduct = (req,res,next)=> {
 
         const name = req.body.name
@@ -63,7 +66,7 @@ exports.getAddProduct = (req,res,next) => {
 
 }
 
-//GET-EDIT
+//GET EDIT ONE PRODUCT
 exports.getEditProduct = (req,res,next) => {
 
     Product.findById(req.params.productid)
