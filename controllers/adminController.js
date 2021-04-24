@@ -1,5 +1,5 @@
 const Product = require('../models/productModel')
-//const Category = require('../models/categoryModel')
+const Category = require('../models/categoryModel')
 
 
 //GET ALL  PRODUCTS
@@ -147,5 +147,105 @@ exports.postDeleteProduct = (req,res) => {
             .catch((err) => {
                 console.log(err)
             })
+
+}
+
+// GET ADD CATEGORY
+exports.getAddCategory = (req,res) => {
+    res.render('admin/add-category',{
+        my_title:"Yeni Kategori",
+        path:'/admin/add-category'
+    })
+
+}
+
+// POST CATEGORY
+exports.postAddCategory = (req,res) => {
+    const name = req.body.name
+    const description = req.body.description
+
+    const category = new Category({
+        name : name,
+        description:description
+    })
+
+    category.save()
+        .then(() => {
+
+            res.redirect('/admin/categories?action=create')
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+// GET CATEGORIES
+exports.getCategories = (req,res) => {
+
+    Category.find()
+        .then(categories => {
+            res.render('../views/admin/categories.ejs', {
+                my_title:'Categories',
+                path:'/admin/categories',
+                categories:categories,
+                my_action:req.query.action
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+
+// GET EDIT CATEGORY
+exports.getEditCategory = (req,res) => {
+    Category.findById(req.params.categoryid)
+        .then((category) => {
+            res.render('../views/admin/edit-category.ejs',{
+                my_title:'Edit Category',
+                path:'/admin/edit-category',
+                category:category
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+
+// POST EDIT CATEGORY
+exports.postEditCategory = (req,res) => {
+
+    const id = req.body.id
+    const name = req.body.name
+    const description = req.body.description
+
+    Category.findById(id)//id bilgisi ilen gelen category'i alalım
+        .then(category => {
+            category.name = name
+            category.description = description
+
+            return category.save()
+        })
+        .then(() => {
+            res.redirect('/admin/categories?action=edit')
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+
+
+exports.postDeleteCategory = (req,res) => {
+    const id = req.body.categoryid
+
+    Category.findByIdAndRemove(id)
+        .then(() => {
+            res.redirect('/admin/categories?action=delete')
+        })
+        .catch(err => {
+            console.log(err)
+        })
 
 }

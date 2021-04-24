@@ -39,8 +39,9 @@ app.use(shopRoutes);
 app.use(errorsController.get404Page);
 
 
+require('dotenv').config()
 
-mongoose.connect('mongodb+srv://craxx3131:sarman6767@btkapp.in0gt.mongodb.net/node-appDB?retryWrites=true&w=majority')
+mongoose.connect(`mongodb+srv://craxx3131:${process.env.PASSWORD}@btkapp.in0gt.mongodb.net/node-appDB?retryWrites=true&w=majority`)
         .then(() => {
             console.log('Bağlantı gerçekleşti....')
 
