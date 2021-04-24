@@ -137,7 +137,6 @@ exports.postDeleteProduct = (req,res) => {
         //2.yöntem
         Product.findByIdAndRemove(id)
             .then(() => {
-
                 res.redirect('/admin/products?action=delete')
             })
 
