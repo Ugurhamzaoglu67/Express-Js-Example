@@ -38,14 +38,23 @@
 
                   <label for="categoryid" class="col-sm-2 col-form-label">Category</label>
                   <div class="form-group">
-                        <select class="form-control" name="categories" id="">
-                              <% categories.forEach(category => {  %>
+                       <!-- <select class="form-control" name="categories" id="">
 
-                                    <option value="<%= category._id%>">
-                                          <%= category.name%>
+
+                                    <option value="<%#= category._id%>">
+                                          <%#= category.name%>
                                     </option>
-                              <% })%>
-                        </select>
+
+                        </select> -->
+
+                  <% categories.forEach(category => {  %>
+                        <input
+                                <% if (category.selected) {%>
+                                          checked
+                                   <% }%>
+                                type="checkbox" name="categories" value="<%= category._id%>">
+                        <%= category.name%>
+                        <% })%>
                   </div>
 
 

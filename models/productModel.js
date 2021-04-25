@@ -21,11 +21,11 @@ const productSchema  = new mongoose.Schema({
             ref:'User',
             required:true
         },
-        categories : {
+        categories : [{
             type : Schema.Types.ObjectId,
             ref:'Category',
             required:true
-        }
+        }]
 
 })
 

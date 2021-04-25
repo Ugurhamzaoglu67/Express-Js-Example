@@ -80,9 +80,30 @@ exports.getAddProduct = (req,res,next) => {
 exports.getEditProduct = (req,res,next) => {
     const id = req.body.id
 
-    Product.findOne({_id: req.params.productid, userId: req.user._id})
+    Product.findById({_id: req.params.productid, userId: req.user._id})
+        //.populate('categories') Ürünler Dizi olarak gelir
+        .then(product => {
+            console.log(product)
+            return product
+        })
         .then(product => {
                 Category.find({}).then(categories => {
+
+                    categories = categories.map(category => {
+
+                        if(product.categories){
+                                product.categories.find(item => {
+                                        if( item.toString() === category._id.toString()){
+                                                category.selected = true
+                                        }
+                                })
+                        }
+
+
+                        return category
+                    })
+
+
 
                     res.render('admin/edit-product', {
                         my_title: 'Ürün Düzenle',
@@ -109,7 +130,10 @@ exports.getEditProduct = (req,res,next) => {
 
 
 
+
        Product.findOne({_id:id}).then(product => {
+           console.log("BURDANN")
+           console.log(product.categories)
             product.name = req.body.name
             product.price = req.body.price
             product.imageUrl = req.body.imageUrl

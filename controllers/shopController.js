@@ -86,7 +86,23 @@ exports.getProductsByCategoryId = (req,res) => {
         const categoryid = req.params.categoryid
         const model = []
 
-        Category.find()
+        Category.aggregate([
+            {
+                $lookup:{
+                    from:'products',
+                    localField:'_id',
+                    foreignField:'categories',
+                    as:'products'
+                }
+            },
+            {
+                $project:{
+                    _id:1,
+                    name:1,
+                    num_of_products:{$size:'$products'}
+                }
+            }
+        ])
             .then((categories) => {
                 model.categories = categories
                 return Product.find({
