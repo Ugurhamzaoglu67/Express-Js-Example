@@ -177,34 +177,11 @@ exports.postCart = (req,res) => {
         let quantity = 1
         let userCart
 
-        req.user.getCart()
-            .then( cart => {
-                userCart = cart
-                return cart.getProducts( { where : {id:productId}})
+        Product.findById(productId)
+            .then(product => {
+                return req.user.addToCart(product)
             })
-            .then(products => {
-                let product
-
-                if(products.length > 0){
-                    product = products[0]
-                }
-
-               if(product) {
-                    quantity += product.cartItem.quantity
-                    return product
-                }
-
-                return Product.findByPk(productId)
-
-            })
-            .then( product => {
-                    userCart.addProduct(product,{
-                        through:{
-                            quantity:quantity
-                        }
-                    })
-            })
-            .then( (result) => {
+            .then(() => {
                 res.redirect('/cart')
             })
             .catch(err => {

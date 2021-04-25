@@ -27,6 +27,38 @@ const userSchema = mongoose.Schema({
         }
 })
 
+userSchema.methods.addToCart = function (product) {
+    const index = this.cart.items.findIndex(cp => {
+        return cp.productId.toString() === product._id.toString()
+    });
+
+    const updatedCartItems = [...this.cart.items];
+
+    let itemQuantity = 1;
+    if (index >= 0) {
+        // cart zaten eklenmek istenen product var: quantity'i arttır
+        itemQuantity = this.cart.items[index].quantity + 1;
+        updatedCartItems[index].quantity = itemQuantity;
+
+    } else {
+        // updatedCartItems!a yeni bir eleman ekle
+        updatedCartItems.push({
+            productId: product._id,
+            quantity: itemQuantity
+        });
+    }
+
+    this.cart = {
+        items: updatedCartItems
+    }
+
+    return this.save();
+}
+
+
+
+
+
 module.exports = mongoose.model('User', userSchema)
 
 
