@@ -9,8 +9,23 @@ exports.getIndex = (req,res) => {
                 return products
           })
           .then(products => {
-              Category.find()
-                  .then(categories => {
+              Category.aggregate([
+                  {
+                      $lookup:{
+                          from:'products',
+                          localField:'_id',
+                          foreignField:'categories',
+                          as:'products'
+                      }
+                  },
+                  {
+                      $project:{
+                          _id:1,
+                          name:1,
+                          num_of_products:{$size:'$products'}
+                      }
+                  }
+              ]).then(categories => {
                       res.render('../views/shop/index.ejs', {
                           my_title:'Shopping',
                           products:products,
@@ -35,8 +50,23 @@ exports.getProducts = (req,res) => {
               return all_products
           })
           .then(all_products => {
-              Category.find()
-                  .then(categories => {
+              Category.aggregate([
+                  {
+                      $lookup:{
+                          from:'products',
+                          localField:'_id',
+                          foreignField:'categories',
+                          as:'products'
+                      }
+                  },
+                  {
+                      $project:{
+                          _id:1,
+                          name:1,
+                          num_of_products:{$size:'$products'}
+                      }
+                  }
+              ]).then(categories => {
                       res.render('../views/shop/products.ejs', {
                           my_title:'Products Page',
                           products:all_products,

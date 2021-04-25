@@ -178,8 +178,24 @@ exports.postAddCategory = (req,res) => {
 // GET CATEGORIES
 exports.getCategories = (req,res) => {
 
-    Category.find()
-        .then(categories => {
+    Category.aggregate([
+        {
+            $lookup:{
+                from:'products',
+                localField:'_id',
+                foreignField:'categories',
+                as:'products'
+            }
+        },
+        {
+            $project:{
+                _id:1,
+                name:1,
+                description:1,
+                num_of_products:{$size:'$products'}
+            }
+        }
+    ]).then(categories => {
             res.render('../views/admin/categories.ejs', {
                 my_title:'Categories',
                 path:'/admin/categories',
