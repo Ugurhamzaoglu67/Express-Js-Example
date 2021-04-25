@@ -12,14 +12,12 @@
 
       <div class="container" style="padding-top:100px;">
             <div class="row mt-3">
-                  <div class="col-lg-3">
-                        <%- include('../layouts/leftmenu.ejs') %> 
-                  </div>
+
 
                   <div class="col-lg-9">
 
-                        <form action="/admin/add-product" method="post">
-
+                        <form action="/admin/add-product?method=PUT" method="POST">
+                              <input type="hidden"  name="_method" value="PUT">
                               <div class="row mb-3">
                                     <label for="productname" class="col-sm-2 col-form-label">Product Name</label>
                                     <div class="col-sm-10 mb-3">
@@ -36,16 +34,17 @@
                                           <input type="text" class="form-control" id="productImage" name="imageUrl">
                                     </div>
 
-<!--                                    <label for="categoryid" class="col-sm-2 col-form-label">Category</label>-->
-<!--                                    <div class="col-sm-10 mb-3">-->
-<!--                                          <select  class="form-select " id="categoryid" name="categoryid" aria-label=".form-select example">-->
-<!--                                                <option selected value="-1">Select Category</option>-->
-<!--                                                <%# categories.forEach((category) => {%>-->
-<!--                                                <option value="<%#= category.id %>"><%#=#category.name%></option>-->
-<!--                                                <%# })%>-->
-<!--                                          </select>-->
+                                    <label for="categoryid" class="col-sm-2 col-form-label">Category</label>
+                                    <div class="form-group mb-4">
+                                          <select class="form-control" name="categories" id="">
+                                                <% categories.forEach(category => {  %>
+                                                      <option value="<%= category._id%>"> <%= category.name%></option>
+                                                <% })%>
+                                          </select>
+                                    </div>
 
-<!--                                    </div>-->
+
+
 
                                     <label for="productDescription" class="col-sm-2 col-form-label">Description</label>
                                     <div class="col-sm-10 mb-3">

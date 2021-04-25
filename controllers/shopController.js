@@ -1,18 +1,27 @@
 const Product = require('../models/productModel')
-//const Category = require('../models/categoryModel')
+const Category = require('../models/categoryModel')
 
 //_______________________________________  ANASAYFA ________________________
 exports.getIndex = (req,res) => {
 
       Product.find()
           .then( products => {
-              res.render('../views/shop/index.ejs', {
-                  my_title:'Shopping',
-                  products:products,
-                  path:'/'
-              })
+                return products
+          })
+          .then(products => {
+              Category.find()
+                  .then(categories => {
+                      res.render('../views/shop/index.ejs', {
+                          my_title:'Shopping',
+                          products:products,
+                          path:'/',
+                          categories:categories
+                      })
 
-          }).catch((err) => {
+                  })
+          })
+
+          .catch((err) => {
                 console.log(err)
                   })
 
@@ -20,32 +29,39 @@ exports.getIndex = (req,res) => {
 
 //_______________________________________  TÜM HEPSİ ________________________
 exports.getProducts = (req,res) => {
-      const categoryid = req.params.categoryid
-
 
       Product.find()
           .then( all_products => {
-              res.render('../views/shop/products.ejs', {
-                  my_title:'Products Page',
-                  products:all_products,
-                  path:'/products'
-              })
-          }).catch((err) => {
+              return all_products
+          })
+          .then(all_products => {
+              Category.find()
+                  .then(categories => {
+                      res.render('../views/shop/products.ejs', {
+                          my_title:'Products Page',
+                          products:all_products,
+                          path:'/products',
+                          categories:categories
+                      })
+
+                  })
+          })
+          .catch((err) => {
                 console.log(err)
               })
-
 }
 
 //_______________________________________  KATEGORİYE GÖRE GETİR ________________________
 exports.getProductsByCategoryId = (req,res) => {
-        const categoryid = Number(req.params.categoryid)
+        const categoryid = req.params.categoryid
         const model = []
 
-        Category.findAll()
+        Category.find()
             .then((categories) => {
                 model.categories = categories
-                const category = categories.find(i=> i.id == categoryid)
-                return category.getProducts()//istenilen category üzerinden -> ona ait product'ları al.
+                return Product.find({
+                    categories:categoryid
+                })
 
             })
             .then((products) => { //returnden geleni products olarak karşılıyoruz

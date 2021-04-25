@@ -63,7 +63,7 @@ mongoose.connect(`mongodb+srv://craxx3131:${process.env.PASSWORD}@btkapp.in0gt.m
                 })
 
                 .then(user => {
-                    console.log(user)
+
                     app.listen(3000)
                 }) .catch(err => {
                          console.log(err)

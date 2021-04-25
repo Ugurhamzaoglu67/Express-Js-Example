@@ -7,9 +7,9 @@ exports.getProducts = (req,res,next) => {
 
     Product.find()
         .populate('userId','name -_id')
-        .select('name price imageUrl userId ')
+        .select('name price imageUrl userId')
         .then((all_products) => {
-            console.log(all_products)
+
             res.render('../views/admin/produtcs.ejs', {
                 my_title:'Admin Products',
                 products:all_products,
@@ -19,29 +19,36 @@ exports.getProducts = (req,res,next) => {
             })
 
 
-
         }).catch((err) => {
             console.log(err)
              })
 }
 
-//GET ADD PRODUCT
+//GET ADD PRODUCT /*********** BAŞARILI******************
 exports.getAddProduct = (req,res,next) => {
-    res.render('../views/admin/add-product',{
-        my_title:'Yeni Ürün',
 
-        path:'/admin/add-product'
- 
- })
+    Category.find({})
+        .then(categories => {
+
+            res.render('../views/admin/add-product',{
+                my_title:'Yeni Ürün',
+                path:'/admin/add-product',
+                categories:categories
+
+            })
+
+        })
+
 }
 
-//POST ADD PRODUCT
+//POST ADD PRODUCT /*********** BAŞARILI******************
  exports.postAddProduct = (req,res,next)=> {
 
         const name = req.body.name
         const price = req.body.price
         const imageUrl = req.body.imageUrl
         const description = req.body.description
+        const categories = req.body.categories
 
         const product = new Product(
             {
@@ -49,7 +56,8 @@ exports.getAddProduct = (req,res,next) => {
                 price : price,
                 description: description,
                 imageUrl : imageUrl,
-                userId : req.user
+                userId : req.user,
+                categories:categories
 
             }
         )
@@ -66,20 +74,26 @@ exports.getAddProduct = (req,res,next) => {
 
 }
 
+
+
 //GET EDIT ONE PRODUCT
 exports.getEditProduct = (req,res,next) => {
+    const id = req.body.id
 
-    Product.findById(req.params.productid)
+    Product.findOne({_id: req.params.productid, userId: req.user._id})
         .then(product => {
-            res.render('admin/edit-product', {
+                Category.find({}).then(categories => {
+
+                    res.render('admin/edit-product', {
                         my_title: 'Ürün Düzenle',
                         path: '/admin/products',
-                        product: product
-                     })
+                        product: product,
+                        categories:categories,
+                        categoryid:id
+                    })
+
+                })
          })
-        .catch(err => {
-            console.log(err)
-        })
  }
 
 
@@ -89,47 +103,29 @@ exports.getEditProduct = (req,res,next) => {
         const id = req.body.id
         const name = req.body.name
         const price = req.body.price
-        const description = req.body.description
         const imageUrl = req.body.imageUrl
-
-        Product.updateMany( { _id : id},{
-            $set : {
-                name: name,
-                price : price,
-                description : description,
-                imageUrl : imageUrl
-            }
-        })
-            .then(() => {
-                console.log("Güncelleme başarılı")
-                res.redirect('/admin/products?action=edit')
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        const description = req.body.description
+        const categories = req.body.categories
 
 
 
+       Product.findOne({_id:id}).then(product => {
+            product.name = req.body.name
+            product.price = req.body.price
+            product.imageUrl = req.body.imageUrl
+            product.description = req.body.description
+            product.categories = req.body.categories
 
-        /* 2. YÖNTEM id'ye GÖRE GÜNCELLEME
-        Product.findById(id)
-            .then(product => {
-                product.name = name
-                product.price = price
-                product.description = description
-                product.imageUrl = imageUrl
+           product.save()
+               .then(() => {
+                   console.log("Güncelleme başarılı")
+                   res.redirect('/admin/products?action=edit')
+               })
+               .catch(err => {
+               console.log(err)
+           })
+       })
 
-                return product.save()
-
-            }) .then(() => {
-
-                console.log("Güncelleme başarılı")
-                res.redirect('/admin/products?action=edit')
-                 })
-                .catch((err) => {
-                    console.log(err)
-                })
-                */
  }
 
 
@@ -203,7 +199,7 @@ exports.getEditCategory = (req,res) => {
         .then((category) => {
             res.render('../views/admin/edit-category.ejs',{
                 my_title:'Edit Category',
-                path:'/admin/edit-category',
+                path:'/admin/categories',
                 category:category
             })
         })

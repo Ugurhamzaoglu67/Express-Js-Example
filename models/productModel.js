@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-const productSchema  = mongoose.Schema({
+const productSchema  = new mongoose.Schema({
         name : {
             type:String,
             required:true
@@ -16,8 +17,13 @@ const productSchema  = mongoose.Schema({
             default : Date.now
         },
         userId : {
-            type : mongoose.Schema.Types.ObjectId,
+            type : Schema.Types.ObjectId,
             ref:'User',
+            required:true
+        },
+        categories : {
+            type : Schema.Types.ObjectId,
+            ref:'Category',
             required:true
         }
 
