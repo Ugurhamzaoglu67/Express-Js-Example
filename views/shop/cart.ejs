@@ -36,22 +36,22 @@
 
                               <tr class="text-center">
                                     <td>
-                                          <img src="/img/<%= product.imageUrl %> "  class="card-img-top" style="width:80px;">
+                                          <img src="/img/<%= product.productId.imageUrl %> "  class="card-img-top" style="width:80px;">
 
                                     </td>
 
-                                    <td> <%= product.name %> </td>
-                                    <td> <%= product.price %> <i class="fas fa-lira-sign"></i> </td>
+                                    <td> <%= product.productId.name %> </td>
+                                    <td> <%= product.productId.price %> <i class="fas fa-lira-sign"></i> </td>
                                     <td >
 
                                           <span class="p-3 rounded bg-warning" style="font-weight: bolder;color:black;border: 1px solid black;position:absolute;" >
-                                                 <%= product.cartItem.quantity %>
+                                                 <%= product.quantity %>
                                           </span>
                                     </td>
 
                                     <td>
                                           <form action="/delete-cartitem" method="POST">
-                                                <input type="hidden" name="productid" value="<%= product.id %>">
+                                                <input type="hidden" name="productid" value="<%= product.productId._id %>">
                                                 <button type="submit" class="btn ms-3 btn-danger btn-sm" style="box-shadow: 0 0.375em 0 black;">
                                                       <i class="fas fa-trash-alt"></i> Delete
                                                 </button>
@@ -71,7 +71,7 @@
                               <% let total=0 %>
                               <% products.forEach((product) => { %>
                                     <% product %>
-                                    <% total += (product.price * product.cartItem.quantity) %>
+                                    <% total += (product.productId.price * product.quantity) %>
                               <% })%>
                               <td class="text-center bolder">Toplam : <%=  total %> TL</td>
                         </tfoot>

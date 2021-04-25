@@ -148,27 +148,19 @@ exports.getProduct = (req,res) => {
 
 //_______________________________________  KART  _________________________________
 exports.getCart = (req,res) => {
-
-        req.user
-            .getCart()
-            .then( cart => {
-                return cart.getProducts()
-                    .then((products) => {
-                        console.log(products)
-                        res.render('shop/cart', {
-                            my_title:'Cart Page',
-                            path:'/cart',
-                            products:products,
-
-                        })
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
-            })
-            .catch(err => {
-                console.log(err)
-            })
+    req.user
+        .populate('cart.items.productId')
+        .execPopulate() //Sorguyu tekrar db'ye gönderip, yukarda ilişkili olan datayı  burdan alalım
+        .then(user => {
+            res.render('../views/shop/cart.ejs', {
+                title: 'Cart',
+                path: '/cart',
+                products: user.cart.items,
+                my_title:'Cart'
+            });
+        }).catch(err => {
+        console.log(err);
+    });
 }
 
 exports.postCart = (req,res) => {

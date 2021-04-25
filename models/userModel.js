@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const Product = require('./productModel.js')
 
 const userSchema = mongoose.Schema({
         name : {
@@ -27,6 +27,7 @@ const userSchema = mongoose.Schema({
         }
 })
 
+//_________________________________________ addToCart () _________________________________
 userSchema.methods.addToCart = function (product) {
     const index = this.cart.items.findIndex(cp => {
         return cp.productId.toString() === product._id.toString()
@@ -54,10 +55,34 @@ userSchema.methods.addToCart = function (product) {
 
     return this.save();
 }
+//_________________________________________ getCart () _________________________________
+userSchema.methods.getCart = function (product) {
 
+    const ids = this.cart.items.map(i => {
+        return i.productId;
+    });
 
+    return Product
+        .find({
+            _id: {
+                $in: ids
+            }
+        })
+        .select('name price imageUrl')
+        .then(products => {
+            return products.map(p => {
+                return {
+                    name: p.name,
+                    price: p.price,
+                    imageUrl: p.imageUrl,
+                    quantity: this.cart.items.find(i => {
+                        return i.productId.toString() === p._id.toString()
+                    }).quantity
+                }
+            });
+        });
 
-
+}
 
 module.exports = mongoose.model('User', userSchema)
 
