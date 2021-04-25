@@ -59,7 +59,14 @@
                 <% categories.forEach((category)=> { %>
 
                     <tr>
-                        <td > <strong>  <%= category.name %> <span style="font-size: 1.3rem;color:crimson"  class="offset-1">  <%= category.num_of_products %> </span></strong></td>
+
+                        <td >
+
+                            <a href="/categories/<%= category._id %>" style="display: block">
+                            <strong>  <%= category.name %> <span style="font-size: 1.3rem;color:crimson"  class="offset-1">  <%= category.num_of_products %> </span></strong>
+                            </a>
+                        </td>
+
                         <td > <%= category.description %> </td>
 
                         <td>
