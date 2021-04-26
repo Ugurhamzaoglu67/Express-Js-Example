@@ -29,7 +29,10 @@ exports.postLogin =(req,res) => {
 
                         return  req.session.save((err) => {
                             console.log(err)
-                            res.redirect('/')
+
+                            const url =req.session.redirectTo || '/';
+                            delete req.session.redirectTo
+                            return res.redirect(url)
                         })
 
                     }
