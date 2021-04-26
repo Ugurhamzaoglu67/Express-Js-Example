@@ -71,29 +71,9 @@ app.use(errorsController.get404Page);
 mongoose.connect(ConnectionString)
         .then(() => {
             console.log('Bağlantı gerçekleşti....')
-
-            User.findOne({name: 'ugurhmz'})
-
-                .then(user => {
-                    if (!user) {
-
-                        user = new User({
-                            name: 'ugurhmz',
-                            email: 'ugur@test.com',
-                            cart: {
-                                items: []
-                            }
-                        })
-                        return user.save()
-                    }
-                    return user
-                })
-
-                .then(user => {
-
-                    app.listen(3000)
-                }) .catch(err => {
-                         console.log(err)
-                     })
-
+            app.listen(3000)
         })
+        .catch(err => {
+             console.log(err)
+         })
+
