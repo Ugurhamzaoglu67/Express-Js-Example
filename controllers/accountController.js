@@ -15,16 +15,33 @@ exports.postLogin =(req,res) => {
     const email = req.body.email
     const password = req.body.password
 
-    if((email=='ugur@gmail.com') && (password=='12345')){
-        //req.isAuthenticated=true
-        //res.cookie('isAuthenticated',true)
-        req.session.isAuthenticated=true
-        res.redirect('/')
-    }
-    else {
-        req.isAuthenticated=false
-        res.redirect('/login')
-    }
+    User.findOne({email:email})
+        .then(user =>{
+            if(!user) {
+                return res.redirect('/login')
+            }
+
+            bcrypt.compare(password,user.password)
+                .then(isSuccess => {
+                    if(isSuccess){
+                        req.session.user = user
+                        req.session.isAuthenticated = true
+
+                        return  req.session.save((err) => {
+                            console.log(err)
+                            res.redirect('/')
+                        })
+
+                    }
+                    res.redirect('/login')
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        })
+        .catch(err => {
+            console.log(err)
+        })
 
 }
 //______________________________________ Register () ________________________

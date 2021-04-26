@@ -14,8 +14,8 @@ exports.getProducts = (req,res,next) => {
                 my_title:'Admin Products',
                 products:all_products,
                 path:'/admin/products',
-                my_action: req.query.action //query-> linkin sonundaki QueryString'leri verir.
-
+                my_action: req.query.action, //query-> linkin sonundaki QueryString'leri verir.
+                isAuthenticated:req.session.isAuthenticated
             })
 
 
@@ -33,7 +33,8 @@ exports.getAddProduct = (req,res,next) => {
             res.render('../views/admin/add-product',{
                 my_title:'Yeni Ürün',
                 path:'/admin/add-product',
-                categories:categories
+                categories:categories,
+                isAuthenticated:req.session.isAuthenticated
 
             })
 
@@ -110,7 +111,8 @@ exports.getEditProduct = (req,res,next) => {
                         path: '/admin/products',
                         product: product,
                         categories:categories,
-                        categoryid:id
+                        categoryid:id,
+                        isAuthenticated:req.session.isAuthenticated
                     })
 
                 })
@@ -174,7 +176,8 @@ exports.postDeleteProduct = (req,res) => {
 exports.getAddCategory = (req,res) => {
     res.render('admin/add-category',{
         my_title:"Yeni Kategori",
-        path:'/admin/add-category'
+        path:'/admin/add-category',
+        isAuthenticated:req.session.isAuthenticated
     })
 
 }
@@ -224,7 +227,8 @@ exports.getCategories = (req,res) => {
                 my_title:'Categories',
                 path:'/admin/categories',
                 categories:categories,
-                my_action:req.query.action
+                my_action:req.query.action,
+                isAuthenticated:req.session.isAuthenticated
             })
         })
         .catch(err => {
@@ -240,7 +244,8 @@ exports.getEditCategory = (req,res) => {
             res.render('../views/admin/edit-category.ejs',{
                 my_title:'Edit Category',
                 path:'/admin/categories',
-                category:category
+                category:category,
+                isAuthenticated:req.session.isAuthenticated
             })
         })
         .catch(err => {

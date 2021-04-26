@@ -63,7 +63,13 @@
                         <td >
 
                             <a href="/categories/<%= category._id %>" style="display: block">
-                            <strong>  <%= category.name %> <span style="font-size: 1.3rem;color:crimson"  class="offset-1">  <%= category.num_of_products %> </span></strong>
+                            <strong>  <%= category.name %> <span style="font-size: 1.3rem;color:black"  class="offset-1">
+
+                                    <span class="badge rounded-pill bg-warning text-dark"> <%= category.num_of_products %></span>
+
+                                </span></strong>
+
+
                             </a>
                         </td>
 

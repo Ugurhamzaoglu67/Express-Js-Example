@@ -211,6 +211,7 @@ exports.getOrders = (req,res) => {
                 my_title:'Orders Page',
                 path:'/orders',
                 orders:orders,
+                isAuthenticated:req.session.isAuthenticated
 
             })
         })
