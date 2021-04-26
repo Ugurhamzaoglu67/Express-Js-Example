@@ -32,7 +32,8 @@ exports.getIndex = (req,res) => {
                           my_title:'Shopping',
                           products:products,
                           path:'/',
-                          categories:categories
+                          categories:categories,
+                          isAuthenticated:req.isAuthenticated
                       })
 
                   })
@@ -73,7 +74,8 @@ exports.getProducts = (req,res) => {
                           my_title:'Products Page',
                           products:all_products,
                           path:'/products',
-                          categories:categories
+                          categories:categories,
+                          isAuthenticated:req.isAuthenticated
                       })
 
                   })
@@ -118,7 +120,8 @@ exports.getProductsByCategoryId = (req,res) => {
                     products:products,
                     categories : model.categories,
                     selectedCategory:categoryid,
-                    path:'/products'
+                    path:'/products',
+                    isAuthenticated:req.isAuthenticated
 
                 })
             })
@@ -139,7 +142,8 @@ exports.getProduct = (req,res) => {
             res.render('shop/product-detail.ejs', {
                 my_title:product.name,
                 product:product, //objenin kendisi, dizi olmadan gelir -> [0][0] ile..
-                path:'/details'
+                path:'/details',
+                isAuthenticated:req.isAuthenticated
             })
         })
         .catch((err) => {
@@ -158,7 +162,8 @@ exports.getCart = (req,res) => {
                 title: 'Cart',
                 path: '/cart',
                 products: user.cart.items,
-                my_title:'Cart'
+                my_title:'Cart',
+                isAuthenticated:req.isAuthenticated
             });
         }).catch(err => {
         console.log(err);

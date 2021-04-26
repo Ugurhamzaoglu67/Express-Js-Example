@@ -37,6 +37,11 @@
                               href="/products">Products</a>
                         </li>
 
+
+                        <!-- if user login -->
+
+                        <% if(isAuthenticated) { %>
+
                         <li class="nav-item">
                               <a 
                               <% if(path==='/cart') { %> 
@@ -103,6 +108,10 @@
                                     href="/admin/add-category">Add Category</a>
                         </li>
 
+
+
+
+
                         <li class="nav-item">
                               <a
 
@@ -114,7 +123,7 @@
                                       <% } %>
                                     href="/admin/categories">Categories</a>
                         </li>
-
+                        <% } %>
 
 
 
@@ -128,33 +137,48 @@
 
                   <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="margin-right: 2rem;">
 
-                        <li class="nav-item bg-primary me-2 col-6 text-center text-white rounded">
-                              <a
-                                      <% if(path==='/login') { %>
-                                            class="nav-link active" style="font-weight: bolder"
-                                      <% } else {%>
-                                            class="nav-link"
+                        <% if (isAuthenticated) { %>
+
+                                    <li class="nav-item bg-primary me-2 col-12 text-center text-white rounded">
+                                          <a
+                                          <% if(path==='/logout') { %>
+                                                class="nav-link active" style="font-weight: bolder"
+                                          <% } else {%>
+                                                class="nav-link"
+                                                  <%}%>
+                                                aria-current="page" href="/logout">
+                                                Logout <i class="fas fa-user-times"></i>
+                                          </a>
+                                    </li>
+
+                        <% } else { %>
+                              <li class="nav-item bg-primary me-2 col-6 text-center text-white rounded">
+                                          <a
+                                          <% if(path==='/login') { %>
+                                                class="nav-link active" style="font-weight: bolder"
+                                          <% } else {%>
+                                                class="nav-link"
+                                                  <%}%>
+                                                aria-current="page" href="/login">
+                                                Login <i class="fas fa-sign-in-alt"></i>
+                                          </a>
+                                    </li>
+
+                              <li class="nav-item bg-success col-7 text-center text-white rounded">
+                                    <a
+                                    <% if(path==='/register') { %>
+                                          class="nav-link active" style="font-weight: bolder"
+                                    <% } else {%>
+                                          class="nav-link"
                                       <%}%>
-                                      aria-current="page" href="/login">
-                                    Login <i class="fas fa-sign-in-alt"></i>
-                              </a>
-                        </li>
 
-                        <li class="nav-item bg-success col-7 text-center text-white rounded">
-                              <a
-                              <% if(path==='/register') { %>
-                                    class="nav-link active" style="font-weight: bolder"
-                              <% } else {%>
-                                    class="nav-link"
-                                <%}%>
+                                            href="/register">
+                                          Register <i class="fas fa-user-plus"></i>
+                                    </a>
+                              </li>
 
-                                      href="/register">
-                                    Register <i class="fas fa-user-plus"></i>
-                              </a>
-                        </li>
 
-                  
-
+                        <%  } %>
                   </ul>
 
             </div>
