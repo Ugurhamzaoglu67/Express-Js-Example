@@ -246,8 +246,8 @@ exports.postOrder = (req,res) => {
 
          })
 
-        .then(() => {
-              //Cart temizleme
+        .then(() => {  //Cart temizleme
+            return req.user.clearCart()
           })
 
         .then(() => {
