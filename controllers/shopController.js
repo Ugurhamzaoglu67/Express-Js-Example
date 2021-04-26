@@ -1,5 +1,7 @@
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel')
+const Order = require('../models/orderModel')
+
 
 //_______________________________________  ANASAYFA ________________________
 exports.getIndex = (req,res) => {
@@ -195,11 +197,6 @@ exports.postCartItemDelete = (req,res) => {
 //_______________________________________  SİPARİŞLERİ GETİR  _________________________________
 exports.getOrders = (req,res) => {
 
-
-
-
-
-      
     req.user.getOrders({ include : ['products']}) //Bana ilişkili olan productlarıda getir
         .then(orders => {
             console.log(orders)
@@ -219,36 +216,46 @@ exports.getOrders = (req,res) => {
 }
 
 exports.postOrder = (req,res) => {
-    let userCart
-        req.user.getCart()
-            .then(cart => {
-                userCart = cart
-                return cart.getProducts()
-            }).then(products => {
-                return req.user.createOrder()
-                    .then(order => {
-                            order.addProducts(products.map(product => {
-                                product.orderItem = {
-                                    quantity:product.cartItem.quantity,
-                                    price:product.price
-                                }
 
-                                return product
+  req.user.populate('cart.items.productId')
+        .execPopulate()
+        .then((user) => {
+            const order = new Order({
+                user : {
+                    userId:req.user._id,
+                    name:req.user.name,
+                    email:req.user.email
 
-                            }))
+                },
+                items:user.cart.items.map(p => {
+                    return {
+                        product : {
+                            _id:p.productId._id,
+                            name: p.productId.name,
+                            price: p.productId.price,
+                            imageUrl: p.productId.imageUrl
 
-                    }).catch((err) => {
-                        console.log(err)
+                        },
+                        quantity:p.quantity
+                    }
                 })
-            })
-            .then(() => {
-                userCart.setProducts(null)
-            })
-            .then(() => {
-                res.redirect('/orders')
+
             })
 
-            .catch((err) => {
-                console.log(err)
-            })
+            return order.save()
+
+         })
+
+        .then(() => {
+              //Cart temizleme
+          })
+
+        .then(() => {
+            res.redirect('/order')
+        })
+
+          .catch(err => {
+              console.log(err)
+          })
+
 }
