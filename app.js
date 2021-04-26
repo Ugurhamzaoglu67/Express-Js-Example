@@ -11,12 +11,21 @@ const mongoose = require('mongoose')
 const User = require('./models/userModel')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
-
+const mongoDbStore = require('connect-mongodb-session')(session)
 
 require('dotenv').config()
 
+const ConnectionString = `mongodb+srv://craxx3131:${process.env.PASSWORD}@btkapp.in0gt.mongodb.net/node-appDB?retryWrites=true&w=majority`
+
 
 //_________________________________________________________________
+
+
+const store = new mongoDbStore({
+    uri:ConnectionString,
+    collection:'mySessions'
+})
+
 
 app.set('view engine','ejs')
 app.use(express.static('public'));
@@ -24,13 +33,15 @@ app.use(express.urlencoded({ extended: true }))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cookieParser())
+
 app.use(session({
     secret:'mysecret',
     resave:false,
     saveUninitialized:false,
     cookie:{
         maxAge:3600000
-    }
+    },
+    store:store
 
 }))
 
@@ -57,7 +68,7 @@ app.use(errorsController.get404Page);
 
 
 
-mongoose.connect(`mongodb+srv://craxx3131:${process.env.PASSWORD}@btkapp.in0gt.mongodb.net/node-appDB?retryWrites=true&w=majority`)
+mongoose.connect(ConnectionString)
         .then(() => {
             console.log('Bağlantı gerçekleşti....')
 
