@@ -197,21 +197,21 @@ exports.postCartItemDelete = (req,res) => {
 //_______________________________________  SİPARİŞLERİ GETİR  _________________________________
 exports.getOrders = (req,res) => {
 
-    req.user.getOrders({ include : ['products']}) //Bana ilişkili olan productlarıda getir
+    Order.find({'user.userId':req.user._id})
         .then(orders => {
             console.log(orders)
-            
-        res.render('../views/shop/orders.ejs', {
-            my_title:'Orders Page',
-            path:'/orders',
-            orders:orders,
+            res.render('../views/shop/orders.ejs', {
+                my_title:'Orders Page',
+                path:'/orders',
+                orders:orders,
 
             })
-
-
-        }).catch(err => {
+        })
+        .catch(err => {
             console.log(err)
         })
+
+
 
 }
 
@@ -251,7 +251,7 @@ exports.postOrder = (req,res) => {
           })
 
         .then(() => {
-            res.redirect('/order')
+            res.redirect('/orders')
         })
 
           .catch(err => {

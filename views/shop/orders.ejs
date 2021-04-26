@@ -16,10 +16,10 @@
                   <% if (orders.length > 0) { %>
 
                         <% orders.forEach((order) => { %>
-                              <div class="card mt-4 border border-dark border-2 " style="margin-bottom:5rem;">
+                              <div class="card b-shadow  mt-4 border border-dark border-2 " style="margin-bottom:5rem;">
 
                                     <div class="card-header">
-                                        Order id:#  <%= order.id%>
+                                        Order id:#  <%= order._id%>
                                     </div>
                                     <div class="card-body">
 
@@ -36,15 +36,15 @@
 
                                             <tbody>
 
-                                            <% order.products.forEach((product) => { %>
+                                            <% order.items.forEach((item) => { %>
                                                 <tr>
 
                                                     <td>
-                                                        <img src="/img/<%= product.imageUrl%>" width="80" alt="">
+                                                        <img src="/img/<%= item.product.imageUrl%>" width="80" alt="">
                                                     </td>
-                                                    <td><%= product.name %></td>
-                                                    <td><%= product.orderItem.price%></td>
-                                                    <td><%= product.orderItem.quantity%></td>
+                                                    <td><%= item.product.name %></td>
+                                                    <td><%= item.product.price%> <i class="fas fa-lira-sign"></i></td>
+                                                    <td><%= item.quantity%> <i class="fas fa-calculator"></i></td>
                                                 </tr>
                                             <% } ) %>
 
@@ -59,18 +59,18 @@
                                       <table class="table">
 
                                       <tr>
-                                          <td colspan="2"><%= order.createdAt.toDateString()%></td>
+                                          <td colspan="2"><%= order.date%></td>
                                           <td >
                                               <% let total=0%>
-                                              <% order.products.forEach((product) => { %>
-                                                  <% product %>
-                                                  <% total += (product.price * product.orderItem.quantity) %>
+                                              <% order.items.forEach((item) => { %>
+                                                  <% item %>
+                                                  <% total += (item.product.price * item.quantity) %>
 
                                               <% })%>
                                           </td>
                                           <td style="font-weight: bolder" class="text-center table-success">
 
-                                              Toplam :   <%=  total %>TL
+                                              Toplam :   <%=  total %> <i class="fas fa-lira-sign"></i>
 
                                           </td>
                                       </tr>
