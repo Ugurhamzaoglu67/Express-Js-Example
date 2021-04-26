@@ -1,3 +1,4 @@
+//______________________________________ Login () ________________________
 exports.getLogin = (req,res) => {
     res.render('account/login', {
         path:'/login',
@@ -6,14 +7,15 @@ exports.getLogin = (req,res) => {
     })
 }
 
-
 exports.postLogin =(req,res) => {
 
     const email = req.body.email
     const password = req.body.password
 
     if((email=='ugur@gmail.com') && (password=='12345')){
-        req.isAuthenticated=true
+        //req.isAuthenticated=true
+
+        res.cookie('isAuthenticated',true)
         res.redirect('/')
     }
     else {
@@ -21,11 +23,8 @@ exports.postLogin =(req,res) => {
         res.redirect('/login')
     }
 
-
-
-
 }
-
+//______________________________________ Register () ________________________
 exports.getRegister = (req,res) => {
     res.render('account/register', {
         path:'/register',
@@ -38,7 +37,7 @@ exports.postRegister = (req,res) => {
     res.redirect('/login')
 }
 
-
+//______________________________________ Reset () ________________________
 exports.getReset = (req,res) => {
     res.render('account/reset-password', {
         my_title:'Reset Password Page',

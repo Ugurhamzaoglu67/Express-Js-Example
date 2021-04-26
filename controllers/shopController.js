@@ -6,6 +6,8 @@ const Order = require('../models/orderModel')
 //_______________________________________  ANASAYFA ________________________
 exports.getIndex = (req,res) => {
 
+    console.log(req.cookies.isAuthenticated)
+
       Product.find()
           .then( products => {
                 return products
@@ -33,7 +35,7 @@ exports.getIndex = (req,res) => {
                           products:products,
                           path:'/',
                           categories:categories,
-                          isAuthenticated:req.isAuthenticated
+                          isAuthenticated:req.cookies.isAuthenticated
                       })
 
                   })
@@ -75,7 +77,7 @@ exports.getProducts = (req,res) => {
                           products:all_products,
                           path:'/products',
                           categories:categories,
-                          isAuthenticated:req.isAuthenticated
+                          isAuthenticated:req.cookies.isAuthenticated
                       })
 
                   })
@@ -121,7 +123,7 @@ exports.getProductsByCategoryId = (req,res) => {
                     categories : model.categories,
                     selectedCategory:categoryid,
                     path:'/products',
-                    isAuthenticated:req.isAuthenticated
+                    isAuthenticated:req.cookies.isAuthenticated
 
                 })
             })
@@ -143,7 +145,7 @@ exports.getProduct = (req,res) => {
                 my_title:product.name,
                 product:product, //objenin kendisi, dizi olmadan gelir -> [0][0] ile..
                 path:'/details',
-                isAuthenticated:req.isAuthenticated
+                isAuthenticated:req.cookies.isAuthenticated
             })
         })
         .catch((err) => {
@@ -163,7 +165,7 @@ exports.getCart = (req,res) => {
                 path: '/cart',
                 products: user.cart.items,
                 my_title:'Cart',
-                isAuthenticated:req.isAuthenticated
+                isAuthenticated:req.cookies.isAuthenticated
             });
         }).catch(err => {
         console.log(err);
