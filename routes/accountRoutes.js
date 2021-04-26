@@ -6,6 +6,7 @@ const accountController = require('../controllers/accountController.js')
 
 router.get('/login',accountController.getLogin)
 router.post('/login',accountController.postLogin)
+router.get('/logout',accountController.getLogout)
 
 
 router.get('/register',accountController.getRegister)

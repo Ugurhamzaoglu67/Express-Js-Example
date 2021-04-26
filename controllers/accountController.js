@@ -102,3 +102,12 @@ exports.getReset = (req,res) => {
 exports.postReset = (req,res) => {
     res.redirect('/login')
 }
+
+//______________________________________ getLogout () ________________________
+exports.getLogout =(req,res) => {
+
+        req.session.destroy(err => {
+            console.log(err)
+            res.redirect('/')
+        })
+}
