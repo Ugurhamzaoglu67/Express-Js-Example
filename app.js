@@ -1,14 +1,16 @@
 const express = require('express')
 const app = express()
+
 const adminRoutes= require('./routes/adminRoutes')
 const shopRoutes = require('./routes/shopRoutes')
+const accountRoutes = require('./routes/accountRoutes.js')
 
 const errorsController = require('./controllers/errors')
 const bodyParser = require("body-parser");
 const mongoose = require('mongoose')
 const User = require('./models/userModel')
 
-
+require('dotenv').config()
 
 
 //_________________________________________________________________
@@ -36,10 +38,11 @@ app.use((req,res,next) => {
 //______________________________ routes ___________________________________
 app.use('/admin',adminRoutes);
 app.use(shopRoutes);
+app.use(accountRoutes)
 app.use(errorsController.get404Page);
 
 
-require('dotenv').config()
+
 
 mongoose.connect(`mongodb+srv://craxx3131:${process.env.PASSWORD}@btkapp.in0gt.mongodb.net/node-appDB?retryWrites=true&w=majority`)
         .then(() => {
