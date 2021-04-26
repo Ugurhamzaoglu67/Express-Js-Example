@@ -6,7 +6,7 @@ const Order = require('../models/orderModel')
 //_______________________________________  ANASAYFA ________________________
 exports.getIndex = (req,res) => {
 
-    console.log(req.cookies.isAuthenticated)
+    console.log(req.session.isAuthenticated)
 
       Product.find()
           .then( products => {
@@ -35,7 +35,7 @@ exports.getIndex = (req,res) => {
                           products:products,
                           path:'/',
                           categories:categories,
-                          isAuthenticated:req.cookies.isAuthenticated
+                          isAuthenticated:req.session.isAuthenticated
                       })
 
                   })
@@ -77,7 +77,7 @@ exports.getProducts = (req,res) => {
                           products:all_products,
                           path:'/products',
                           categories:categories,
-                          isAuthenticated:req.cookies.isAuthenticated
+                          isAuthenticated:req.session.isAuthenticated
                       })
 
                   })
@@ -123,7 +123,7 @@ exports.getProductsByCategoryId = (req,res) => {
                     categories : model.categories,
                     selectedCategory:categoryid,
                     path:'/products',
-                    isAuthenticated:req.cookies.isAuthenticated
+                    isAuthenticated:req.session.isAuthenticated
 
                 })
             })
@@ -145,7 +145,7 @@ exports.getProduct = (req,res) => {
                 my_title:product.name,
                 product:product, //objenin kendisi, dizi olmadan gelir -> [0][0] ile..
                 path:'/details',
-                isAuthenticated:req.cookies.isAuthenticated
+                isAuthenticated:req.session.isAuthenticated
             })
         })
         .catch((err) => {
@@ -165,7 +165,7 @@ exports.getCart = (req,res) => {
                 path: '/cart',
                 products: user.cart.items,
                 my_title:'Cart',
-                isAuthenticated:req.cookies.isAuthenticated
+                isAuthenticated:req.session.isAuthenticated
             });
         }).catch(err => {
         console.log(err);

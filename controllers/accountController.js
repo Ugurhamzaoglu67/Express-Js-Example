@@ -14,8 +14,8 @@ exports.postLogin =(req,res) => {
 
     if((email=='ugur@gmail.com') && (password=='12345')){
         //req.isAuthenticated=true
-
-        res.cookie('isAuthenticated',true)
+        //res.cookie('isAuthenticated',true)
+        req.session.isAuthenticated=true
         res.redirect('/')
     }
     else {

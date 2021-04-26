@@ -10,6 +10,8 @@ const bodyParser = require("body-parser");
 const mongoose = require('mongoose')
 const User = require('./models/userModel')
 const cookieParser = require('cookie-parser')
+const session = require('express-session')
+
 
 require('dotenv').config()
 
@@ -22,6 +24,15 @@ app.use(express.urlencoded({ extended: true }))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cookieParser())
+app.use(session({
+    secret:'mysecret',
+    resave:false,
+    saveUninitialized:false,
+    cookie:{
+        maxAge:3600000
+    }
+
+}))
 
 app.use((req,res,next) => {
         User.findOne({name:'ugurhmz'})
