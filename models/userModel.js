@@ -55,6 +55,7 @@ userSchema.methods.addToCart = function (product) {
 
     return this.save();
 }
+
 //_________________________________________ getCart () _________________________________
 userSchema.methods.getCart = function (product) {
 
@@ -81,6 +82,18 @@ userSchema.methods.getCart = function (product) {
                 }
             });
         });
+
+}
+
+
+//______________________________________ deleteCartItem () _________________________
+userSchema.methods.deleteCartItem = function(productid) {
+    const cartItems = this.cart.items.filter(item => {
+        return item.productId.toString() !== productid.toString()
+    })
+
+    this.cart.items = cartItems
+    return this.save()
 
 }
 

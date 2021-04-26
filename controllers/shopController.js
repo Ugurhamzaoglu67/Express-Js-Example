@@ -166,8 +166,7 @@ exports.getCart = (req,res) => {
 exports.postCart = (req,res) => {
 
         const productId = req.body.productId
-        let quantity = 1
-        let userCart
+
 
         Product.findById(productId)
             .then(product => {
@@ -186,22 +185,10 @@ exports.postCart = (req,res) => {
 
 exports.postCartItemDelete = (req,res) => {
         const productid = req.body.productid
-        req.user.getCart() //Usere bağlı olan o 'anki kartı aldık
-
-            .then( cart => {
-                return cart.getProducts( {where : {id : productid }})  //Bu kartlar arasından-> seçmiş olduğumu bir sonraki thene
-
-            }) //Kart bilgisini then'de karşıladık
-
-            .then(products => {
-                const product = products[0]
-                return product.cartItem.destroy()
-
-            })
-            .then((result) => {
-                res.redirect('/cart')
-            })
-
+       req.user.deleteCartItem(productid)
+           .then(() => {
+               res.redirect('/cart')
+           })
 }
 
 
