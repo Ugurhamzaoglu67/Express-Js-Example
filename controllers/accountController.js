@@ -1,4 +1,5 @@
 const User = require('../models/userModel')
+const bcrypt = require('bcrypt')
 
 //______________________________________ Login () ________________________
 exports.getLogin = (req,res) => {
@@ -46,16 +47,19 @@ exports.postRegister = (req,res) => {
         .then(user => {
             if(user){
                 return res.redirect('/register') //return ile register'den sonra kodlar aşağı gitmesinki, işlemi burda keselim
-            }else {
+            }
+
+            return bcrypt.hash(password,10)
+        })
+        .then((hashedPassword)=> {
+            console.log(hashedPassword)
                 const newUser = new User({
                     name:name,
                     email:email,
-                    password:password,
+                    password:hashedPassword,
                     cart:{ items: [] }
                 })
-
-               return newUser.save()
-            }
+                return newUser.save()
         })
         .then( ()=> {
             res.redirect('/login')
