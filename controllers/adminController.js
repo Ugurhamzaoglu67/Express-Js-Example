@@ -15,7 +15,8 @@ exports.getProducts = (req,res,next) => {
                 products:all_products,
                 path:'/admin/products',
                 my_action: req.query.action, //query-> linkin sonundaki QueryString'leri verir.
-                isAuthenticated:req.session.isAuthenticated
+                
+                
             })
 
 
@@ -34,7 +35,8 @@ exports.getAddProduct = (req,res,next) => {
                 my_title:'Yeni Ürün',
                 path:'/admin/add-product',
                 categories:categories,
-                isAuthenticated:req.session.isAuthenticated
+                
+                
 
             })
 
@@ -112,7 +114,8 @@ exports.getEditProduct = (req,res,next) => {
                         product: product,
                         categories:categories,
                         categoryid:id,
-                        isAuthenticated:req.session.isAuthenticated
+                        
+                        
                     })
 
                 })
@@ -177,7 +180,8 @@ exports.getAddCategory = (req,res) => {
     res.render('admin/add-category',{
         my_title:"Yeni Kategori",
         path:'/admin/add-category',
-        isAuthenticated:req.session.isAuthenticated
+        
+        
     })
 
 }
@@ -228,7 +232,8 @@ exports.getCategories = (req,res) => {
                 path:'/admin/categories',
                 categories:categories,
                 my_action:req.query.action,
-                isAuthenticated:req.session.isAuthenticated
+                
+                
             })
         })
         .catch(err => {
@@ -245,7 +250,8 @@ exports.getEditCategory = (req,res) => {
                 my_title:'Edit Category',
                 path:'/admin/categories',
                 category:category,
-                isAuthenticated:req.session.isAuthenticated
+                
+                
             })
         })
         .catch(err => {

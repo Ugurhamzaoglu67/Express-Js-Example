@@ -6,7 +6,8 @@ exports.getLogin = (req,res) => {
     res.render('account/login', {
         path:'/login',
         my_title:'Login Page',
-        isAuthenticated:req.session.isAuthenticated
+        
+        
     })
 }
 
@@ -52,7 +53,9 @@ exports.getRegister = (req,res) => {
     res.render('account/register', {
         path:'/register',
         my_title:'Register Page',
-        isAuthenticated:req.session.isAuthenticated
+        
+        
+
     })
 }
 
@@ -95,7 +98,8 @@ exports.getReset = (req,res) => {
     res.render('account/reset-password', {
         my_title:'Reset Password Page',
         path:'/reset-password',
-        isAuthenticated:req.session.isAuthenticated
+        
+        
     })
 }
 

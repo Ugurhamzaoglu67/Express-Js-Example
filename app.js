@@ -13,6 +13,9 @@ const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const mongoDbStore = require('connect-mongodb-session')(session)
 
+const csurf = require('csurf')
+
+
 require('dotenv').config()
 
 const ConnectionString = `mongodb+srv://craxx3131:${process.env.PASSWORD}@btkapp.in0gt.mongodb.net/node-appDB?retryWrites=true&w=majority`
@@ -64,7 +67,7 @@ app.use((req,res,next) => {
 
 
 
-
+app.use(csurf({ cookie: true }))
 //______________________________ routes ___________________________________
 app.use('/admin',adminRoutes);
 app.use(shopRoutes);
