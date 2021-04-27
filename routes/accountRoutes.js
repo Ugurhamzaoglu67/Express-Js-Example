@@ -17,6 +17,11 @@ router.get('/reset-password',csrf,accountController.getReset)
 router.post('/reset-password',csrf,accountController.postReset)
 
 
+router.get('/reset-password/:token',csrf,accountController.getNewPassword)
+router.post('/new-password',csrf,accountController.postNewPassword) //Formun action kısmı -> /new-password olucak
+
+
+
 module.exports = router
 
 

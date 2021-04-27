@@ -220,6 +220,79 @@ exports.postReset = (req,res) => {
         })
 }
 
+
+
+
+//______________________________________ Password () ________________________
+exports.getNewPassword =(req,res) => {
+
+
+    const errorMessage = req.session.errorMessage
+    delete req.session.errorMessage
+
+
+    const token = req.params.token   //-> /reset-password/:token  burdaki token
+
+    User.findOne( {
+        resetToken:token,
+        resetTokenExpiration : {
+            $gt:Date.now()    //Şimdiki tarihten büyük bir tarih varmı
+        }
+     })    // Collection içindeki token da , yukardaki token  varmı
+        .then(user => {
+            res.render('account/new-password', {
+                my_title:'New Password Page',
+                path:'/new-password',
+                errorMessage:errorMessage,
+                userId: user._id.toString(),
+                passwordToken :token
+
+            })
+        }).catch(err => {
+            console.log(err)
+    })
+}
+
+
+exports.postNewPassword =(req,res) => {
+
+    const newPassword = req.body.password
+    const userId = req.body.userId
+    const token  = req.body.passwordToken
+    let _user;
+
+    User.findOne( {
+        resetToken:token,
+        resetTokenExpiration : {
+            $gt:Date.now()    //Şimdiki tarihten büyük bir tarih varmı
+        },
+        _id:userId
+
+    }).then(user => {
+        _user = user
+        return bcrypt.hash(newPassword,10)
+    })
+    .then(hashedPassword => {
+        _user.password = hashedPassword
+        _user.resetToken = undefined
+        _user.resetTokenExpiration = undefined
+        return _user.save()
+    })
+    .then(() => {
+        res.redirect('/login')
+    })
+    .catch(err => {
+        console.log(err)
+    })
+
+
+}
+
+
+
+
+
+
 //______________________________________ getLogout () ________________________
 exports.getLogout =(req,res) => {
 
