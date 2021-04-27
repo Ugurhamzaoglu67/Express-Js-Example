@@ -140,11 +140,15 @@ exports.postRegister = (req,res) => {
 
 //______________________________________ Reset () ________________________
 exports.getReset = (req,res) => {
+
+    const errorMessage = req.session.errorMessage
+    delete req.session.errorMessage
+
     res.render('account/reset-password', {
         my_title:'Reset Password Page',
         path:'/reset-password',
-        
-        
+        errorMessage:errorMessage
+
     })
 }
 
