@@ -3,10 +3,13 @@ const bcrypt = require('bcrypt')
 
 //______________________________________ Login () ________________________
 exports.getLogin = (req,res) => {
+    let errorMessage = req.session.errorMessage;
+    delete req.session.errorMessage //Session Sıfırlama Sayfa gönderdikten sonra
+
     res.render('account/login', {
         path:'/login',
         my_title:'Login Page',
-        
+        errorMessage:errorMessage
         
     })
 }
@@ -19,7 +22,12 @@ exports.postLogin =(req,res) => {
     User.findOne({email:email})
         .then(user =>{
             if(!user) {
-                return res.redirect('/login')
+                req.session.errorMessage = "Bu Mail adresi ile ilgili bir kayıt bulunamamıştır."
+                req.session.save((err) => {
+                    console.log(err)
+                    return res.redirect('/login')
+                })
+
             }
 
             bcrypt.compare(password,user.password)
@@ -50,10 +58,13 @@ exports.postLogin =(req,res) => {
 }
 //______________________________________ Register () ________________________
 exports.getRegister = (req,res) => {
+    const errorMessage = req.session.errorMessage
+    delete req.session.errorMessage
+
     res.render('account/register', {
         path:'/register',
         my_title:'Register Page',
-        
+        errorMessage:errorMessage
         
 
     })
@@ -69,7 +80,14 @@ exports.postRegister = (req,res) => {
     User.findOne({email:email})
         .then(user => {
             if(user){
+
+            req.session.errorMessage = "Bu Mail adresi ile daha öne kayıt olunmuş."
+            req.session.save((err) => {
+                console.log(err)
                 return res.redirect('/register') //return ile register'den sonra kodlar aşağı gitmesinki, işlemi burda keselim
+
+            })
+
             }
 
             return bcrypt.hash(password,10)
