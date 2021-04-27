@@ -43,58 +43,52 @@
                         <% if(isAuthenticated) { %>
 
                         <li class="nav-item">
-                              <a 
-                              <% if(path==='/cart') { %> 
-                                    class="nav-link active" 
-                                    
-                              <% } else { %> 
-                                    class="nav-link" 
-                              <% } %>      
-      
+                              <a
+                              <% if(path==='/cart') { %>
+                                    class="nav-link active"
+
+                              <% } else { %>
+                                    class="nav-link"
+                              <% } %>
+
                               href="/cart">Cart</a>
                         </li>
 
-
                         <li class="nav-item">
-                              <a 
-                              <% if(path==='/orders') { %> 
-                                    class="nav-link active" 
-                                    
-                              <% } else { %> 
-                                    class="nav-link" 
-                              <% } %>      
-      
+                              <a
+                              <% if(path==='/orders') { %>
+                                    class="nav-link active"
+
+                              <% } else { %>
+                                    class="nav-link"
+                              <% } %>
+
                               href="/orders">Orders</a>
                         </li>
 
-
-
-
                         <li class="nav-item">
-                              <a 
+                              <a
 
-                              <% if(path==='/admin/add-product') { %> 
+                              <% if(path==='/admin/add-product') { %>
                               class="nav-link active"
-                              
-                              <% } else { %> 
+
+                              <% } else { %>
                                     class="nav-link"
-                              <% } %> 
+                              <% } %>
                               href="/admin/add-product">Add Product</a>
                         </li>
 
-                        
                         <li class="nav-item">
-                              <a 
+                              <a
 
-                              <% if(path==='/admin/products') { %> 
+                              <% if(path==='/admin/products') { %>
                               class="nav-link active"
-                              
-                              <% } else { %> 
+
+                              <% } else { %>
                                     class="nav-link"
-                              <% } %> 
+                              <% } %>
                               href="/admin/products">Admin Products</a>
                         </li>
-
 
                         <li class="nav-item">
                               <a
@@ -107,10 +101,6 @@
                                       <% } %>
                                     href="/admin/add-category">Add Category</a>
                         </li>
-
-
-
-
 
                         <li class="nav-item">
                               <a
@@ -125,15 +115,7 @@
                         </li>
                         <% } %>
 
-
-
-
-
-
                   </ul>
-
-
-
 
                   <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="margin-right: 2rem;">
 

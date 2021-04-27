@@ -1,7 +1,7 @@
 const User = require('../models/userModel')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
-
+const crypto = require('crypto')
 
 //______________________________________ Login () ________________________
 exports.getLogin = (req,res) => {
@@ -153,7 +153,71 @@ exports.getReset = (req,res) => {
 }
 
 exports.postReset = (req,res) => {
-    res.redirect('/login')
+
+        const email = req.body.email
+
+        crypto.randomBytes(32, (err,buffer) => {
+            if(err) {
+                console.log(err)
+                return res.redirect('/reset-password')
+            }
+
+            const token = buffer.toString('hex')
+
+            User.findOne({email:email})
+                .then(user => {
+                    if(!user){
+                        req.session.errorMessage ='Email adresi bulunamadı.'
+                        req.session.save((err) => {
+                            console.log(err)
+                            return res.redirect('/reset-password')
+                        })
+                    }
+
+                    user.resetToken = token
+                    user.resetTokenExpiration = Date.now()+3600000
+
+                    return user.save()
+                }).then(result => {
+
+
+                    res.redirect('/login')
+
+                    let transporter= nodemailer.createTransport({
+                        service:'gmail',
+                        auth:{
+                            user:'ugur.hmz52@gmail.com',
+                            pass:process.env.EMAIL_PASS
+                        }
+                    })
+
+
+                    let mailOptions = {
+                        from:'ugur.hmz52@gmail.com',
+                        to:`${email}`,
+                        subject:'Parola Sıfırlama',
+                        html:`
+                        <p> Parolanızı güncellemek için aşağıdaki linke tıklayınız. </p>
+                        <p>
+                            <a href="http://localhost:3000/reset-password/${token}">
+                            <strong>Reset password</strong>
+                            </a> 
+                        </p>
+                        
+                        `
+                    }
+
+                    transporter.sendMail(mailOptions, (err,data) =>{
+                        if(err) console.log(err)
+                        else console.log('Mail Gönderildi')
+                    })
+
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+
+        })
 }
 
 //______________________________________ getLogout () ________________________

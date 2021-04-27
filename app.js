@@ -12,7 +12,7 @@ const User = require('./models/userModel')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const mongoDbStore = require('connect-mongodb-session')(session)
-
+const isAuthenticated = require('./middleware/authentication.js')
 const csurf = require('csurf')
 
 
@@ -72,7 +72,7 @@ app.use(csurf({ cookie: true }))
 app.use('/admin',adminRoutes);
 app.use(shopRoutes);
 app.use(accountRoutes)
-app.use(errorsController.get404Page);
+app.use(isAuthenticated,errorsController.get404Page);
 
 
 

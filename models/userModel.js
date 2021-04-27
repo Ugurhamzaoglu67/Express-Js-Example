@@ -14,6 +14,8 @@ const userSchema = mongoose.Schema({
             type:String,
             required : true
         },
+        resetToken:String,
+        resetTokenExpiration:Date, //Zaman vericez Tokene...
         cart : { //Kullanıcının Kart objesi
             items : [
                 {
