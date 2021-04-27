@@ -1,5 +1,7 @@
 const User = require('../models/userModel')
 const bcrypt = require('bcrypt')
+const nodemailer = require('nodemailer')
+
 
 //______________________________________ Login () ________________________
 exports.getLogin = (req,res) => {
@@ -103,7 +105,32 @@ exports.postRegister = (req,res) => {
                 return newUser.save()
         })
         .then( ()=> {
+
+
             res.redirect('/login')
+
+            let transporter= nodemailer.createTransport({
+                service:'gmail',
+                auth:{
+                    user:'ugur.hmz52@gmail.com',
+                    pass:process.env.EMAIL_PASS
+                }
+            })
+
+
+            let mailOptions = {
+                from:'ugur.hmz52@gmail.com',
+                to:`${email}`,
+                subject:'Hesap Başarılı bir şekilde oluşturuldu',
+                html:'<h1>Hesabınız başarılı bir şekilde oluşturuldu</h1>'
+            }
+
+            transporter.sendMail(mailOptions, (err,data) =>{
+                if(err) console.log(err)
+                else console.log('Mail Gönderildi')
+            })
+
+
          })
         .catch(err => {
             console.log(err)
