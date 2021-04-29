@@ -51,6 +51,7 @@
 
                                     <td>
                                           <form action="/delete-cartitem" method="POST">
+                                                <input type="hidden" name="_csrf" value="<%= csrfToken%>">
                                                 <input type="hidden" name="productid" value="<%= product.productId._id %>">
                                                 <button type="submit" class="btn ms-3 btn-danger btn-sm" style="box-shadow: 0 0.375em 0 black;">
                                                       <i class="fas fa-trash-alt"></i> Delete
@@ -81,6 +82,7 @@
                     <div class="text-center">
                           <a href="/" class="btn btn-outline-info">Alış verişe devam et</a>
                           <form action="/create-order" method="POST">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken%>">
                                 <button href="/checkout" class="btn btn-primary ms-2">Alış-verişi tamamla</button>
                           </form>
                     </div>

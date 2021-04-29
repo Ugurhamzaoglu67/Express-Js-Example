@@ -15,7 +15,7 @@ exports.getProducts = (req,res,next) => {
                 products:all_products,
                 path:'/admin/products',
                 my_action: req.query.action, //query-> linkin sonundaki QueryString'leri verir.
-
+                user:req.user
             })
 
         }).catch((err) => {
@@ -33,7 +33,7 @@ exports.getAddProduct = (req,res,next) => {
                 my_title:'Yeni Ürün',
                 path:'/admin/add-product',
                 categories:categories,
-                
+                user:req.user
                 
 
             })
@@ -58,7 +58,10 @@ exports.getAddProduct = (req,res,next) => {
                 description: description,
                 imageUrl : imageUrl,
                 userId : req.user,
-                categories:categories
+               // categories:categories,
+                category:'telefon',
+                isActive:false,
+                tags :['Akıllı telefon']
 
             }
         )
@@ -111,6 +114,7 @@ exports.getEditProduct = (req,res,next) => {
                         product: product,
                         categories:categories,
                         categoryid:id,
+                        user:req.user
 
                     })
                 })
@@ -172,6 +176,7 @@ exports.getAddCategory = (req,res) => {
     res.render('admin/add-category',{
         my_title:"Yeni Kategori",
         path:'/admin/add-category',
+        user:req.user
         
         
     })
@@ -224,6 +229,7 @@ exports.getCategories = (req,res) => {
                 path:'/admin/categories',
                 categories:categories,
                 my_action:req.query.action,
+                user:req.user
                 
                 
             })
@@ -242,6 +248,7 @@ exports.getEditCategory = (req,res) => {
                 my_title:'Edit Category',
                 path:'/admin/categories',
                 category:category,
+                user:req.user
                 
                 
             })

@@ -77,6 +77,7 @@ exports.getProducts = (req,res) => {
                           products:all_products,
                           path:'/products',
                           categories:categories,
+                          user:req.user
                           
                       })
 
@@ -123,6 +124,7 @@ exports.getProductsByCategoryId = (req,res) => {
                     categories : model.categories,
                     selectedCategory:categoryid,
                     path:'/products',
+                    user:req.user
                     
 
                 })
@@ -145,6 +147,7 @@ exports.getProduct = (req,res) => {
                 my_title:product.name,
                 product:product, //objenin kendisi, dizi olmadan gelir -> [0][0] ile..
                 path:'/details',
+                user:req.user
                 
             })
         })
@@ -165,6 +168,7 @@ exports.getCart = (req,res) => {
                 path: '/cart',
                 products: user.cart.items,
                 my_title:'Cart',
+                user:req.user
                 
             });
         }).catch(err => {
@@ -211,6 +215,7 @@ exports.getOrders = (req,res) => {
                 my_title:'Orders Page',
                 path:'/orders',
                 orders:orders,
+                user:req.user
                 
 
             })

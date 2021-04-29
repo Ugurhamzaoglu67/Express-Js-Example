@@ -33,6 +33,7 @@
                               </a>
 
                               <form action="/cart" method="POST">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken%>">
                                     <input type="hidden" name="productId" value="<%= product._id%>">
 
                                     <button   class="btn btn-outline-success btn-sm" style="margin-left: 3px;" type="submit">
