@@ -81,6 +81,7 @@
                             </a>
 
                             <form action="/admin/delete-category" method="POST">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken%>">
                                 <input type="hidden" name="categoryid" value="<%= category._id %>">
                                 <button type="submit" class="btn ms-3 btn-danger btn-sm" style="box-shadow: 0 0.375em 0 black;">
                                     <i class="fas fa-trash-alt"></i> Delete

@@ -14,10 +14,10 @@ router.get('/categories/:categoryid',csrf,shopController.getProductsByCategoryId
 router.get('/products',csrf,shopController.getProducts)
 //router.get('/details',shopController.getProductDetails)
 router.get('/cart',isAuthenticated ,csrf,shopController.getCart)
-router.post('/cart',isAuthenticated ,shopController.postCart)
-router.post('/delete-cartitem',isAuthenticated ,shopController.postCartItemDelete)
+router.post('/cart',isAuthenticated ,csrf,shopController.postCart)
+router.post('/delete-cartitem',isAuthenticated ,csrf,shopController.postCartItemDelete)
 router.get('/orders',isAuthenticated ,csrf,shopController.getOrders)
-router.post('/create-order',isAuthenticated ,shopController.postOrder)
+router.post('/create-order',isAuthenticated ,csrf,shopController.postOrder)
 
 
 

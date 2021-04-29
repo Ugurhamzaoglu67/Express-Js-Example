@@ -5,7 +5,7 @@ const Category = require('../models/categoryModel')
 //GET ALL  PRODUCTS
 exports.getProducts = (req,res,next) => {
 
-    Product.find()
+    Product.find({userId: req.user._id})
         .populate('userId','name -_id')
         .select('name price imageUrl userId')
         .then((all_products) => {
@@ -74,9 +74,7 @@ exports.getAddProduct = (req,res,next) => {
                     console.log(err)
                 })
 
-
 }
-
 
 
 //GET EDIT ONE PRODUCT
@@ -86,7 +84,11 @@ exports.getEditProduct = (req,res,next) => {
     Product.findById({_id: req.params.productid, userId: req.user._id})
         //.populate('categories') Ürünler Dizi olarak gelir
         .then(product => {
-            console.log(product)
+
+            if(!product){
+                return res.redirect('/')
+            }
+
             return product
         })
         .then(product => {
@@ -102,11 +104,8 @@ exports.getEditProduct = (req,res,next) => {
                                 })
                         }
 
-
                         return category
                     })
-
-
 
                     res.render('admin/edit-product', {
                         my_title: 'Ürün Düzenle',
@@ -114,10 +113,8 @@ exports.getEditProduct = (req,res,next) => {
                         product: product,
                         categories:categories,
                         categoryid:id,
-                        
-                        
-                    })
 
+                    })
                 })
          })
  }
@@ -127,18 +124,10 @@ exports.getEditProduct = (req,res,next) => {
  exports.postEditProduct = (req,res,next)=> {
 
         const id = req.body.id
-        const name = req.body.name
-        const price = req.body.price
-        const imageUrl = req.body.imageUrl
-        const description = req.body.description
-        const categories = req.body.categories
 
 
+       Product.findOne({_id:id, userId:req.user._id}).then(product => {
 
-
-       Product.findOne({_id:id}).then(product => {
-           console.log("BURDANN")
-           console.log(product.categories)
             product.name = req.body.name
             product.price = req.body.price
             product.imageUrl = req.body.imageUrl
@@ -164,8 +153,13 @@ exports.postDeleteProduct = (req,res) => {
         const id = req.body.productid
 
         //2.yöntem
-        Product.findByIdAndRemove(id)
-            .then(() => {
+        Product.findByIdAndRemove({_id:id, userId:req.user._id})
+            .then((result) => {
+                if(result.deletedCount === 0) {
+                        return res.redirect('/')
+                }
+
+                console.log('Product deleted..')
                 res.redirect('/admin/products?action=delete')
             })
 
