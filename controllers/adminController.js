@@ -15,10 +15,8 @@ exports.getProducts = (req,res,next) => {
                 products:all_products,
                 path:'/admin/products',
                 my_action: req.query.action, //query-> linkin sonundaki QueryString'leri verir.
-                
-                
-            })
 
+            })
 
         }).catch((err) => {
             console.log(err)

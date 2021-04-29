@@ -33,6 +33,7 @@ exports.getIndex = (req,res) => {
                           products:products,
                           path:'/',
                           categories:categories,
+                          user:req.user
 
                           
                       })

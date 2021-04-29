@@ -40,7 +40,7 @@
 
                         <!-- if user login -->
 
-                        <% if(isAuthenticated) { %>
+                   <% if(isAuthenticated) { %>
 
                         <li class="nav-item">
                               <a
@@ -66,17 +66,18 @@
                               href="/orders">Orders</a>
                         </li>
 
-                        <li class="nav-item">
-                              <a
+                        <% if (isAdmin) { %>
+                              <li class="nav-item">
+                                    <a
 
-                              <% if(path==='/admin/add-product') { %>
-                              class="nav-link active"
+                                    <% if(path==='/admin/add-product') { %>
+                                    class="nav-link active"
 
-                              <% } else { %>
-                                    class="nav-link"
-                              <% } %>
-                              href="/admin/add-product">Add Product</a>
-                        </li>
+                                    <% } else { %>
+                                          class="nav-link"
+                                    <% } %>
+                                    href="/admin/add-product">Add Product</a>
+                              </li>
 
                         <li class="nav-item">
                               <a
@@ -113,18 +114,25 @@
                                       <% } %>
                                     href="/admin/categories">Categories</a>
                         </li>
-                        <% } %>
+                               <% } %>
+
+
+                    <% } %>
 
                   </ul>
+
+
 
                   <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="margin-right: 2rem;">
 
                         <% if (isAuthenticated) { %>
 
+
+
                                     <li class="nav-item bg-primary me-2 col-12 text-center text-white rounded">
                                           <a class="nav-link " style="font-weight: bolder"
                                                 aria-current="page" href="/logout">
-                                                Logout <i class="fas fa-user-times"></i>
+                                                Logout <%= user.name%> <i class="fas fa-user-times"> </i>
                                           </a>
                                     </li>
 

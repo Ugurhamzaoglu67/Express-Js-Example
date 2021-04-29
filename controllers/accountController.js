@@ -289,10 +289,6 @@ exports.postNewPassword =(req,res) => {
 }
 
 
-
-
-
-
 //______________________________________ getLogout () ________________________
 exports.getLogout =(req,res) => {
 

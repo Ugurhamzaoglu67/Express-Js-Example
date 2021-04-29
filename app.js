@@ -72,7 +72,7 @@ app.use(csurf({ cookie: true }))
 app.use('/admin',adminRoutes);
 app.use(shopRoutes);
 app.use(accountRoutes)
-app.use(isAuthenticated,errorsController.get404Page);
+app.use(errorsController.get404Page);
 
 
 
