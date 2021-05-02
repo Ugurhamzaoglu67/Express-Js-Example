@@ -4,9 +4,11 @@ const Schema = mongoose.Schema
 const productSchema  = new mongoose.Schema({
         name : {
             type:String,
-            required:true,
-            minlength:5,
-            maxlength:255
+            required:[true, 'Ürün ismi girmelisiniz'],
+            minlength:[5,"Ürün ismi min 5 karakter olmalı"],
+            maxlength:[255, "Ürün  ismi en az 255 karakter olmalı"],
+            lowercase:true,
+            trim : true
         },
         price : {
             type : Number,
@@ -15,11 +17,13 @@ const productSchema  = new mongoose.Schema({
                 }
             ,
             minlength:0,
-            maxlength:50000
+            maxlength:50000,
+            get: value => Math.round(value), //ürünler gelince bunu göster ve yuvarla.
+            set: value => Math.round(value) //product -> üzerinden fiyata değer atınca bu çalışır dbye round kayıt
         },
         description : {
             type:String,
-            minlength:200
+            minlength:10
         },
         imageUrl : String,
         date : {
@@ -32,13 +36,9 @@ const productSchema  = new mongoose.Schema({
             required:true
         },
 
-        category:{
-            type: String,
-            enum : ['telefon','Bilgisayar']
-        },
         tags : {
           type :Array,
-          valdiate: {
+          validate: {
               validator : function(value) {
                   return value && value.length > 0;//Mutlaka değer olucak ve  > 0
               },
@@ -47,14 +47,13 @@ const productSchema  = new mongoose.Schema({
         },
         isActive : {
             type:Boolean
-        }
+        },
 
-    /*
         categories : [{
             type : Schema.Types.ObjectId,
             ref:'Category',
             required:true
-        }]*/
+        }]
 
 })
 

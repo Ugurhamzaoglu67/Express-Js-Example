@@ -23,26 +23,31 @@ exports.getProducts = (req,res,next) => {
              })
 }
 
-//GET ADD PRODUCT /*********** BAŞARILI******************
+//GET ADD PRODUCT
 exports.getAddProduct = (req,res,next) => {
 
     Category.find({})
         .then(categories => {
 
-            res.render('../views/admin/add-product',{
-                my_title:'Yeni Ürün',
-                path:'/admin/add-product',
-                categories:categories,
-                user:req.user
-                
+            let message=''
+
+            res.render('../views/admin/add-product', {
+                my_title: 'Yeni Ürün',
+                path: '/admin/add-product',
+                categories: categories,
+                user: req.user,
+                errorMessage:message
 
             })
 
-        })
+        }).catch(err => {
+            console.log(err)
+    })
 
 }
 
-//POST ADD PRODUCT /*********** BAŞARILI******************
+
+//POST ADD PRODUCT
  exports.postAddProduct = (req,res,next)=> {
 
         const name = req.body.name
@@ -59,7 +64,7 @@ exports.getAddProduct = (req,res,next) => {
                 imageUrl : imageUrl,
                 userId : req.user,
                // categories:categories,
-                category:'telefon',
+                categories:categories,
                 isActive:false,
                 tags :['Akıllı telefon']
 
@@ -72,11 +77,29 @@ exports.getAddProduct = (req,res,next) => {
                     res.redirect('/admin/products')
                 })
                 .catch((err) => {
-                    console.log(err)
+                    let message = ''
+
+                    if ( err.name == 'ValidationError') {
+                        for (field in err.errors) {
+                            message += err.errors[field].message + "</br>";
+                        }
+                    }
+
+                    res.render('../views/admin/add-product', {
+                        my_title: 'Yeni Ürün',
+                        path: '/admin/add-product',
+                        categories: categories,
+                        user: req.user,
+                        errorMessage:message,
+                        inputs : {
+                            name:name,
+                            price:price,
+                            description:description
+                        }
+                    })
                 })
 
 }
-
 
 //GET EDIT ONE PRODUCT
 exports.getEditProduct = (req,res,next) => {
@@ -147,7 +170,6 @@ exports.getEditProduct = (req,res,next) => {
        })
 
  }
-
 
 //POST-DELETE
 exports.postDeleteProduct = (req,res) => {

@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-
+//_________________________________ ROUTES ____________________________
 const adminRoutes= require('./routes/adminRoutes')
 const shopRoutes = require('./routes/shopRoutes')
 const accountRoutes = require('./routes/accountRoutes.js')
