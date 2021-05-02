@@ -1,6 +1,6 @@
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel')
-
+const mongoose = require('mongoose')
 
 //GET ALL  PRODUCTS
 exports.getProducts = (req,res,next) => {
@@ -19,7 +19,7 @@ exports.getProducts = (req,res,next) => {
             })
 
         }).catch((err) => {
-            console.log(err)
+        res.redirect('/500')
              })
 }
 
@@ -41,7 +41,7 @@ exports.getAddProduct = (req,res,next) => {
             })
 
         }).catch(err => {
-            console.log(err)
+            res.redirect('/500')
     })
 
 }
@@ -58,6 +58,7 @@ exports.getAddProduct = (req,res,next) => {
 
         const product = new Product(
             {
+                _id : new mongoose.Types.ObjectId('608a78eede5b900d9c581cf8'),
                 name:name,
                 price : price,
                 description: description,
@@ -77,26 +78,36 @@ exports.getAddProduct = (req,res,next) => {
                     res.redirect('/admin/products')
                 })
                 .catch((err) => {
-                    let message = ''
+
 
                     if ( err.name == 'ValidationError') {
+                        let message=''
                         for (field in err.errors) {
                             message += err.errors[field].message + "</br>";
                         }
+
+                        res.render('../views/admin/add-product', {
+                            my_title: 'Yeni Ürün',
+                            path: '/admin/add-product',
+                            categories: categories,
+                            user: req.user,
+                            errorMessage:message,
+                            inputs : {
+                                name:name,
+                                price:price,
+                                description:description
+                            }
+                        })
+
+
+                    }
+                    else {
+                        //hata mesajı yönlendir..
+
+                        res.redirect('/500')
+
                     }
 
-                    res.render('../views/admin/add-product', {
-                        my_title: 'Yeni Ürün',
-                        path: '/admin/add-product',
-                        categories: categories,
-                        user: req.user,
-                        errorMessage:message,
-                        inputs : {
-                            name:name,
-                            price:price,
-                            description:description
-                        }
-                    })
                 })
 
 }
@@ -165,7 +176,7 @@ exports.getEditProduct = (req,res,next) => {
                    res.redirect('/admin/products?action=edit')
                })
                .catch(err => {
-               console.log(err)
+                   res.redirect('/500')
            })
        })
 
@@ -188,7 +199,7 @@ exports.postDeleteProduct = (req,res) => {
             })
 
             .catch((err) => {
-                console.log(err)
+                res.redirect('/500')
             })
 
 }
@@ -221,7 +232,7 @@ exports.postAddCategory = (req,res) => {
             res.redirect('/admin/categories?action=create')
         })
         .catch(err => {
-            console.log(err)
+            res.redirect('/500')
         })
 }
 
@@ -257,7 +268,7 @@ exports.getCategories = (req,res) => {
             })
         })
         .catch(err => {
-            console.log(err)
+            res.redirect('/500')
         })
 }
 
@@ -276,7 +287,7 @@ exports.getEditCategory = (req,res) => {
             })
         })
         .catch(err => {
-            console.log(err)
+            res.redirect('/500')
         })
 }
 
@@ -299,7 +310,7 @@ exports.postEditCategory = (req,res) => {
             res.redirect('/admin/categories?action=edit')
         })
         .catch(err => {
-            console.log(err)
+            res.redirect('/500')
         })
 }
 
@@ -313,7 +324,7 @@ exports.postDeleteCategory = (req,res) => {
             res.redirect('/admin/categories?action=delete')
         })
         .catch(err => {
-            console.log(err)
+            res.redirect('/500')
         })
 
 }
