@@ -17,7 +17,7 @@ exports.getLogin = (req,res) => {
     })
 }
 
-exports.postLogin =(req,res) => {
+exports.postLogin =(req,res,next) => {
 
     const email = req.body.email
     const password = req.body.password
@@ -83,6 +83,8 @@ exports.postLogin =(req,res) => {
                         errorMessage:message
 
                     })
+                }else {
+                    next(err)
                 }
         })
 
@@ -101,7 +103,7 @@ exports.getRegister = (req,res) => {
     })
 }
 
-exports.postRegister = (req,res) => {
+exports.postRegister = (req,res,next) => {
 
     const name = req.body.name
     const email = req.body.email
@@ -136,33 +138,47 @@ exports.postRegister = (req,res) => {
         .then( ()=> {
 
 
-            res.redirect('/login')
-    //___________________________ LOGIN MAIL ( NodeMailer ) _________________
-            let transporter= nodemailer.createTransport({
-                service:'gmail',
-                auth:{
-                    user:'ugur.hmz52@gmail.com',
-                    pass:process.env.EMAIL_PASS
-                }
-            })
+                    res.redirect('/login')
+                    //___________________________ LOGIN MAIL ( NodeMailer ) _________________
+                    let transporter= nodemailer.createTransport({
+                        service:'gmail',
+                        auth:{
+                            user:'ugur.hmz52@gmail.com',
+                            pass:process.env.EMAIL_PASS
+                        }
+                    })
 
 
-            let mailOptions = {
-                from:'ugur.hmz52@gmail.com',
-                to:`${email}`,
-                subject:'Hesap Başarılı bir şekilde oluşturuldu',
-                html:'<h1>Hesabınız başarılı bir şekilde oluşturuldu</h1>'
-            }
+                    let mailOptions = {
+                        from:'ugur.hmz52@gmail.com',
+                        to:`${email}`,
+                        subject:'Hesap Başarılı bir şekilde oluşturuldu',
+                        html:'<h1>Hesabınız başarılı bir şekilde oluşturuldu</h1>'
+                    }
 
-            transporter.sendMail(mailOptions, (err,data) =>{
-                if(err) console.log(err)
-                else console.log('Mail Gönderildi')
-            })
-
-
+                    transporter.sendMail(mailOptions, (err,data) =>{
+                        if(err) console.log(err)
+                        else console.log('Mail Gönderildi')
+                    })
          })
         .catch(err => {
-            console.log(err.message)
+
+            if ( err.name == 'ValidationError') {
+                let message=''
+                for (field in err.errors) {
+                    message += err.errors[field].message
+                }
+
+                res.render('account/register', {
+                    path:'/register',
+                    my_title:'Register Page',
+                    errorMessage:message
+
+                })
+            }else {
+                next(err)
+            }
+
         })
 
 }
@@ -181,13 +197,13 @@ exports.getReset = (req,res) => {
     })
 }
 
-exports.postReset = (req,res) => {
+exports.postReset = (req,res,next) => {
 
         const email = req.body.email
 
         crypto.randomBytes(32, (err,buffer) => {
             if(err) {
-                console.log(err)
+
                 return res.redirect('/reset-password')
             }
 
@@ -198,7 +214,7 @@ exports.postReset = (req,res) => {
                     if(!user){
                         req.session.errorMessage ='Email adresi bulunamadı.'
                         req.session.save((err) => {
-                            console.log(err)
+
                             return res.redirect('/reset-password')
                         })
                     }
@@ -208,8 +224,6 @@ exports.postReset = (req,res) => {
 
                     return user.save()
                 }).then(result => {
-
-
                     res.redirect('/login')
 
                     let transporter= nodemailer.createTransport({
@@ -243,7 +257,8 @@ exports.postReset = (req,res) => {
 
                 })
                 .catch(err => {
-                    console.log(err)
+
+                    next(err)
                 })
 
         })
@@ -253,7 +268,7 @@ exports.postReset = (req,res) => {
 
 
 //______________________________________ Password () ________________________
-exports.getNewPassword =(req,res) => {
+exports.getNewPassword =(req,res,next) => {
 
 
     const errorMessage = req.session.errorMessage
@@ -278,12 +293,12 @@ exports.getNewPassword =(req,res) => {
 
             })
         }).catch(err => {
-            console.log(err)
+        next(err)
     })
 }
 
 
-exports.postNewPassword =(req,res) => {
+exports.postNewPassword =(req,res,next) => {
 
     const newPassword = req.body.password
     const userId = req.body.userId
@@ -311,7 +326,7 @@ exports.postNewPassword =(req,res) => {
         res.redirect('/login')
     })
     .catch(err => {
-        console.log(err)
+        next(err)
     })
 
 

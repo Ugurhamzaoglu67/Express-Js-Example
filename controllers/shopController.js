@@ -4,7 +4,7 @@ const Order = require('../models/orderModel')
 
 
 //_______________________________________  ANASAYFA ________________________
-exports.getIndex = (req,res) => {
+exports.getIndex = (req,res,next) => {
 
       Product.find()
           .then( products => {
@@ -42,13 +42,13 @@ exports.getIndex = (req,res) => {
           })
 
           .catch((err) => {
-                console.log(err)
-                  })
+                next(err)
+          })
 
 }
 
 //_______________________________________  TÜM HEPSİ ________________________
-exports.getProducts = (req,res) => {
+exports.getProducts = (req,res,next) => {
 
       Product.find()
           .then( all_products => {
@@ -84,12 +84,12 @@ exports.getProducts = (req,res) => {
                   })
           })
           .catch((err) => {
-                console.log(err)
-              })
+              next(err)
+          })
 }
 
 //_______________________________________  KATEGORİYE GÖRE GETİR ________________________
-exports.getProductsByCategoryId = (req,res) => {
+exports.getProductsByCategoryId = (req,res,next) => {
         const categoryid = req.params.categoryid
         const model = []
 
@@ -130,14 +130,14 @@ exports.getProductsByCategoryId = (req,res) => {
                 })
             })
             .catch((err) => {
-                console.log(err)
+                next(err)
             })
 
 }
 
 
 //_______________________________________  DETAY / TEK ÜRÜN( ID ) ________________________
-exports.getProduct = (req,res) => {
+exports.getProduct = (req,res,next) => {
 
        Product
         //.findById(req.params.productid)
@@ -152,13 +152,13 @@ exports.getProduct = (req,res) => {
             })
         })
         .catch((err) => {
-                console.log(err)
+             next(err)
             })
 
 }
 
 //_______________________________________  KART  _________________________________
-exports.getCart = (req,res) => {
+exports.getCart = (req,res,next) => {
     req.user
         .populate('cart.items.productId')
         .execPopulate() //Sorguyu tekrar db'ye gönderip, yukarda ilişkili olan datayı  burdan alalım
@@ -172,11 +172,11 @@ exports.getCart = (req,res) => {
                 
             });
         }).catch(err => {
-        console.log(err);
+         next(err)
     });
 }
 
-exports.postCart = (req,res) => {
+exports.postCart = (req,res,next) => {
 
         const productId = req.body.productId
 
@@ -189,7 +189,7 @@ exports.postCart = (req,res) => {
                 res.redirect('/cart')
             })
             .catch(err => {
-                console.log(err)
+                next(err)
             })
 
 }
@@ -206,7 +206,7 @@ exports.postCartItemDelete = (req,res) => {
 
 
 //_______________________________________  SİPARİŞLERİ GETİR  _________________________________
-exports.getOrders = (req,res) => {
+exports.getOrders = (req,res,next) => {
 
     Order.find({'user.userId':req.user._id})
         .then(orders => {
@@ -221,14 +221,14 @@ exports.getOrders = (req,res) => {
             })
         })
         .catch(err => {
-            console.log(err)
+            next(err)
         })
 
 
 
 }
 
-exports.postOrder = (req,res) => {
+exports.postOrder = (req,res,next) => {
 
   req.user.populate('cart.items.productId')
         .execPopulate()
@@ -268,7 +268,7 @@ exports.postOrder = (req,res) => {
         })
 
           .catch(err => {
-              console.log(err)
+              next(err)
           })
 
 }

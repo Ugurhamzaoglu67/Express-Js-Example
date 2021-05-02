@@ -19,7 +19,7 @@ exports.getProducts = (req,res,next) => {
             })
 
         }).catch((err) => {
-        res.redirect('/500')
+                next(err)
              })
 }
 
@@ -41,7 +41,7 @@ exports.getAddProduct = (req,res,next) => {
             })
 
         }).catch(err => {
-            res.redirect('/500')
+                next(err)
     })
 
 }
@@ -58,7 +58,7 @@ exports.getAddProduct = (req,res,next) => {
 
         const product = new Product(
             {
-                _id : new mongoose.Types.ObjectId('608a78eede5b900d9c581cf8'),
+
                 name:name,
                 price : price,
                 description: description,
@@ -148,6 +148,9 @@ exports.getEditProduct = (req,res,next) => {
                     })
                 })
          })
+        .catch(err => {
+            next(err)
+        })
  }
 
 
@@ -171,14 +174,14 @@ exports.getEditProduct = (req,res,next) => {
                    res.redirect('/admin/products?action=edit')
                })
                .catch(err => {
-                   res.redirect('/500')
+                   next(err)
            })
        })
 
  }
 
 //POST-DELETE
-exports.postDeleteProduct = (req,res) => {
+exports.postDeleteProduct = (req,res,next) => {
 
         const id = req.body.productid
 
@@ -194,7 +197,7 @@ exports.postDeleteProduct = (req,res) => {
             })
 
             .catch((err) => {
-                res.redirect('/500')
+                next(err)
             })
 
 }
@@ -212,7 +215,7 @@ exports.getAddCategory = (req,res) => {
 }
 
 // POST CATEGORY
-exports.postAddCategory = (req,res) => {
+exports.postAddCategory = (req,res,next) => {
     const name = req.body.name
     const description = req.body.description
 
@@ -227,12 +230,12 @@ exports.postAddCategory = (req,res) => {
             res.redirect('/admin/categories?action=create')
         })
         .catch(err => {
-            res.redirect('/500')
+            next(err)
         })
 }
 
 // GET CATEGORIES
-exports.getCategories = (req,res) => {
+exports.getCategories = (req,res,next) => {
 
     Category.aggregate([
         {
@@ -263,13 +266,13 @@ exports.getCategories = (req,res) => {
             })
         })
         .catch(err => {
-            res.redirect('/500')
+            next(err)
         })
 }
 
 
 // GET EDIT CATEGORY
-exports.getEditCategory = (req,res) => {
+exports.getEditCategory = (req,res,next) => {
     Category.findById(req.params.categoryid)
         .then((category) => {
             res.render('../views/admin/edit-category.ejs',{
@@ -282,13 +285,13 @@ exports.getEditCategory = (req,res) => {
             })
         })
         .catch(err => {
-            res.redirect('/500')
+            next(err)
         })
 }
 
 
 // POST EDIT CATEGORY
-exports.postEditCategory = (req,res) => {
+exports.postEditCategory = (req,res,next) => {
 
     const id = req.body.id
     const name = req.body.name
@@ -305,13 +308,13 @@ exports.postEditCategory = (req,res) => {
             res.redirect('/admin/categories?action=edit')
         })
         .catch(err => {
-            res.redirect('/500')
+            next(err)
         })
 }
 
 
 
-exports.postDeleteCategory = (req,res) => {
+exports.postDeleteCategory = (req,res,next) => {
     const id = req.body.categoryid
 
     Category.findByIdAndRemove(id)
@@ -319,7 +322,7 @@ exports.postDeleteCategory = (req,res) => {
             res.redirect('/admin/categories?action=delete')
         })
         .catch(err => {
-            res.redirect('/500')
+            next(err)
         })
 
 }
