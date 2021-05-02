@@ -104,8 +104,8 @@ exports.getAddProduct = (req,res,next) => {
                     else {
                         //hata mesajı yönlendir..
 
-                        res.redirect('/500')
 
+                        next(err) //Sürecin içine hatayı aktar, döngü bitmeden o requsete ekle
                     }
 
                 })

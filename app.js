@@ -75,7 +75,21 @@ app.use(accountRoutes)
 app.use('/500',errorsController.get500page)
 app.use(errorsController.get404Page);
 
+/*  -&
+    BU ŞEKİLDE AYRI SAYFAYA REQUEST OLMAZ ,
+    DİREK AYNI  SAYFAYA RENDER EDER
+    */
+app.use((error,req,res,next) =>{
+    res.status(500).render('error/500',{
+        my_title:'ERROR',
+        path:'ERROR',
+        isAuthenticated:req.session.isAuthenticated,
+        user:req.user,
+        isAdmin:req.user.isAdmin
+    })
+})
 
+/*  end &  */
 
 
 mongoose.connect(ConnectionString)
