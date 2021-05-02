@@ -1,4 +1,5 @@
 const User = require('../models/userModel')
+const Login = require('../models/loginModel.js')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const crypto = require('crypto')
@@ -21,40 +22,68 @@ exports.postLogin =(req,res) => {
     const email = req.body.email
     const password = req.body.password
 
-    User.findOne({email:email})
-        .then(user =>{
-            if(!user) {
-                req.session.errorMessage = "Bu Mail adresi ile ilgili bir kayıt bulunamamıştır."
-                req.session.save((err) => {
-                    console.log(err)
-                    return res.redirect('/login')
-                })
+    const loginModel = new Login({
+        email : email,
+        password : password
+    })
 
-            }
-
-            bcrypt.compare(password,user.password)
-                .then(isSuccess => {
-                    if(isSuccess){
-                        req.session.user = user
-                        req.session.isAuthenticated = true
-
-                        return  req.session.save((err) => {
-                            console.log(err)
-
-                            const url =req.session.redirectTo || '/';
-                            delete req.session.redirectTo
-                            return res.redirect(url)
+    loginModel
+        .validate()
+        .then(() => {
+            User.findOne({email:email})
+                .then(user =>{
+                    //EĞER KULLANICI YOKSA
+                    if(!user) {
+                        req.session.errorMessage = "Bu Mail adresi ile ilgili bir kayıt bulunamamıştır."
+                        req.session.save(() => {
+                            return res.redirect('/login')
                         })
 
                     }
-                    res.redirect('/login')
-                })
-                .catch(err => {
-                    console.log(err)
+                //DB hash Password - >EĞER BU KULLANICI VARSA
+                    bcrypt.compare(password,user.password) //bu Kullanıcı ile  şifre karşılaştır
+                        .then(isSuccess => {
+                            if(isSuccess){ //Karşılaştırma sonucu success ise
+                                req.session.user = user
+                                req.session.isAuthenticated = true //Login işlemi yapılcak sonra useri' session objesine at
+
+                                return  req.session.save((err) => {
+                                    console.log(err)
+
+                                    const url =req.session.redirectTo || '/'; //Eğerki daha önceden session içinde bir bilgi varsa  Oraya git, yoksa anasayfa
+                                    delete req.session.redirectTo
+                                    return res.redirect(url)
+                                })
+
+                            }
+                            //Karşılaştırma sonucu HATALI  ise
+                            req.session.errorMessage ="Hatalı E-mail ya da Parola girdiniz!"
+                            req.session.save(() => {
+                                res.redirect('/login')
+                            })
+
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                //DB hash Password
                 })
         })
+
         .catch(err => {
-            console.log(err)
+                if ( err.name == 'ValidationError') {
+                    let message=''
+                    for (field in err.errors) {
+                        message += err.errors[field].message
+                    }
+
+                    res.render('account/login', {
+                        path:'/login',
+                        my_title:'Login Page',
+                        errorMessage:message
+
+                    })
+                }
         })
 
 }
@@ -95,7 +124,7 @@ exports.postRegister = (req,res) => {
             return bcrypt.hash(password,10)
         })
         .then((hashedPassword)=> {
-            console.log(hashedPassword)
+
                 const newUser = new User({
                     name:name,
                     email:email,
@@ -108,7 +137,7 @@ exports.postRegister = (req,res) => {
 
 
             res.redirect('/login')
-
+    //___________________________ LOGIN MAIL ( NodeMailer ) _________________
             let transporter= nodemailer.createTransport({
                 service:'gmail',
                 auth:{

@@ -81,35 +81,30 @@ exports.getAddProduct = (req,res,next) => {
 
 
                     if ( err.name == 'ValidationError') {
-                        let message=''
-                        for (field in err.errors) {
-                            message += err.errors[field].message + "</br>";
-                        }
-
-                        res.render('../views/admin/add-product', {
-                            my_title: 'Yeni Ürün',
-                            path: '/admin/add-product',
-                            categories: categories,
-                            user: req.user,
-                            errorMessage:message,
-                            inputs : {
-                                name:name,
-                                price:price,
-                                description:description
+                            let message=''
+                            for (field in err.errors) {
+                                message += err.errors[field].message + "</br>";
                             }
-                        })
 
-
+                            res.render('../views/admin/add-product', {
+                                my_title: 'Yeni Ürün',
+                                path: '/admin/add-product',
+                                categories: categories,
+                                user: req.user,
+                                errorMessage:message,
+                                inputs : {
+                                    name:name,
+                                    price:price,
+                                    description:description
+                                }
+                            })
                     }
                     else {
                         //hata mesajı yönlendir..
-
-
                         next(err) //Sürecin içine hatayı aktar, döngü bitmeden o requsete ekle
                     }
 
                 })
-
 }
 
 //GET EDIT ONE PRODUCT
