@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const path = require('path')
 //_________________________________ ROUTES ____________________________
 const adminRoutes= require('./routes/adminRoutes')
 const shopRoutes = require('./routes/shopRoutes')
@@ -14,6 +15,7 @@ const session = require('express-session')
 const mongoDbStore = require('connect-mongodb-session')(session)
 const isAuthenticated = require('./middleware/authentication.js')
 const csurf = require('csurf')
+const multer = require('multer')
 
 
 require('dotenv').config()
@@ -29,11 +31,23 @@ const store = new mongoDbStore({
     collection:'mySessions'
 })
 
+const storage = multer.diskStorage({
+    destination : function(req, file, cb)  {
+            cb(null,'./public/img')
 
+    },
+    filename : function (req, file, cb) {
+        cb(null, file.fieldname + '-' +Date.now() + path.extname(file.originalname))
+    }
+
+})
 app.set('view engine','ejs')
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }))
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false })) //Normal text dataları ele alır.
+app.use(multer({
+    storage:storage
+}).single('imageUrl')) //Multer üzerinden tek
 app.use(bodyParser.json())
 app.use(cookieParser())
 
@@ -87,6 +101,7 @@ app.use((error,req,res,next) =>{
         user:req.user,
         isAdmin:req.user.isAdmin
     })
+
 })
 
 /*  end &  */

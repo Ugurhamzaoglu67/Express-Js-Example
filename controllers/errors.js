@@ -14,7 +14,7 @@ exports.get404Page = (req,res) => {
 
 
 exports.get500page = (req,res) =>{
-      console.log(req.user)
+
                 res.status(500).render('../views/error/500.ejs',{
                       my_title:'Eror Page',
                       path:'500',

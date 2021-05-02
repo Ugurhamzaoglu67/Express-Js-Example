@@ -52,19 +52,19 @@ exports.getAddProduct = (req,res,next) => {
 
         const name = req.body.name
         const price = req.body.price
-        const imageUrl = req.body.imageUrl
+        const file = req.file
         const description = req.body.description
         const categories = req.body.categories
 
+        console.log(file)
         const product = new Product(
             {
 
                 name:name,
                 price : price,
                 description: description,
-                imageUrl : imageUrl,
+                imageUrl : file.filename,
                 userId : req.user,
-               // categories:categories,
                 categories:categories,
                 isActive:false,
                 tags :['Akıllı telefon']
@@ -79,7 +79,7 @@ exports.getAddProduct = (req,res,next) => {
                 })
                 .catch((err) => {
 
-
+                    console.log(err)
                     if ( err.name == 'ValidationError') {
                             let message=''
                             for (field in err.errors) {
@@ -100,8 +100,8 @@ exports.getAddProduct = (req,res,next) => {
                             })
                     }
                     else {
-                        //hata mesajı yönlendir..
-                        next(err) //Sürecin içine hatayı aktar, döngü bitmeden o requsete ekle
+
+                        next(err)
                     }
 
                 })
