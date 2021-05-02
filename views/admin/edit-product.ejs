@@ -67,7 +67,7 @@
 
                   <label for="productDescription" class="col-sm-2 col-form-label">Description</label>
                   <div class="col-sm-10 mb-3">
-                        <textarea name="description" id="productDescription" cols="80" rows="10"><%= product.description%></textarea>
+                        <textarea name="description" id="editor" cols="80" rows="10"><%= product.description%></textarea>
                   </div>
 
             </div>
@@ -86,3 +86,5 @@
 
 
 <%- include('../layouts/footer.ejs') %>
+<script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+<script src="/js/script.js"></script>
