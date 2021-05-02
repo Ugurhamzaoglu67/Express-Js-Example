@@ -1,6 +1,8 @@
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel')
 const mongoose = require('mongoose')
+const fs = require('fs') //Eski resimleri silmek için
+const path = require('path')
 
 //GET ALL  PRODUCTS
 exports.getProducts = (req,res,next) => {
@@ -172,71 +174,92 @@ exports.getEditProduct = (req,res,next) => {
 
 
 //POST-EDIT
- exports.postEditProduct = (req,res,next)=> {
-
-        const id = req.body.id
-        const name = req.body.name
-        const price = req.body.price
-        const imageUrl = req.file
-        const description = req.body.description
-        const categories = req.body.categories
-
-         const product = {
-                name:name,
-                price:price,
-
-                description:description,
-                categories:categories
-         }
-
-         if(imageUrl){
-                product.imageUrl = imageUrl.filename
-         }
-
-       Product.updateOne({_id:id, userId:req.user._id}, {
-           $set:product
-         })
+exports.postEditProduct = (req,res,next)=> {
 
 
-           //.then(product => {
+    const id = req.body.id
+    const name = req.body.name
+    const price = req.body.price
+    const imageUrl = req.file
+    const description = req.body.description
+    const categories = req.body.categories
 
-            // product.name = req.body.name
-            // product.price = req.body.price
-            // product.imageUrl = req.file.filename
-            // product.description = req.body.description
-            // product.categories = req.body.categories
+    const product = {
+        name:name,
+        price:price,
 
-          // product.save()
-           .then(() => {
-               console.log("Güncelleme başarılı")
-               res.redirect('/admin/products?action=edit')
-           })
-           .catch(err => {
-               next(err)
-           })
-    //   })
+        description:description,
+        categories:categories
+    }
 
- }
+    if(imageUrl){
 
+        product.imageUrl = imageUrl.filename
+    }
+
+   return Product.updateOne({_id:id, userId:req.user._id}, {
+        $set:product
+    })
+
+        .then(() => {
+            console.log("Güncelleme başarılı")
+            res.redirect('/admin/products?action=edit')
+        })
+        .catch(err => {
+            next(err)
+        })
+
+
+}
 //POST-DELETE
 exports.postDeleteProduct = (req,res,next) => {
 
         const id = req.body.productid
 
-        //2.yöntem
         Product.findByIdAndRemove({_id:id, userId:req.user._id})
-            .then((result) => {
-                if(result.deletedCount === 0) {
-                        return res.redirect('/')
+            .then(product => {
+                if(!product) {
+                    return next(new Error("Silmek ürün bulunamadı"))
                 }
 
-                console.log('Product deleted..')
-                res.redirect('/admin/products?action=delete')
+                fs.unlink('public/img/' + product.imageUrl, err => {
+                    if(err) {
+                        console.log(err)
+                    }
+                });
+
+                return  Product.findByIdAndRemove({_id:id, userId:req.user._id})
+                    .then((result) => {
+                        if(result.deletedCount === 0) {
+                            return next(new Error("Silmek ürün bulunamadı"))
+                        }
+
+                        console.log('Product deleted..')
+                        res.redirect('/admin/products?action=delete')
+                    })
+
+                    .catch((err) => {
+                        next(err)
+                    })
             })
 
-            .catch((err) => {
-                next(err)
-            })
+
+
+
+        // //2.yöntem
+        // Product.findByIdAndRemove({_id:id, userId:req.user._id})
+        //     .then((result) => {
+        //         if(result.deletedCount === 0) {
+        //                 return res.redirect('/')
+        //         }
+        //
+        //         console.log('Product deleted..')
+        //         res.redirect('/admin/products?action=delete')
+        //     })
+        //
+        //     .catch((err) => {
+        //         next(err)
+        //     })
 
 }
 

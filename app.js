@@ -94,6 +94,7 @@ app.use(errorsController.get404Page);
     DİREK AYNI  SAYFAYA RENDER EDER
     */
 app.use((error,req,res,next) =>{
+    console.log(error)
     res.status(500).render('error/500',{
         my_title:'ERROR',
         path:'ERROR',
