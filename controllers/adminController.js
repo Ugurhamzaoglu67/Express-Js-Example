@@ -52,18 +52,35 @@ exports.getAddProduct = (req,res,next) => {
 
         const name = req.body.name
         const price = req.body.price
-        const file = req.file
+        const image = req.file
         const description = req.body.description
         const categories = req.body.categories
 
-        console.log(file)
+        if(!image) { //Eğer image seçilmediyse
+
+            return  res.render('../views/admin/add-product', {
+                my_title: 'Yeni Ürün',
+                path: '/admin/add-product',
+                categories: categories,
+                user: req.user,
+                errorMessage:"Lütfen bir resim seçiniz..",
+                inputs : {
+                    name:name,
+                    price:price,
+                    description:description
+                }
+
+            })
+        }
+
+
         const product = new Product(
             {
 
                 name:name,
                 price : price,
                 description: description,
-                imageUrl : file.filename,
+                imageUrl : image.filename,
                 userId : req.user,
                 categories:categories,
                 isActive:false,
@@ -158,25 +175,46 @@ exports.getEditProduct = (req,res,next) => {
  exports.postEditProduct = (req,res,next)=> {
 
         const id = req.body.id
+        const name = req.body.name
+        const price = req.body.price
+        const imageUrl = req.file
+        const description = req.body.description
+        const categories = req.body.categories
+
+         const product = {
+                name:name,
+                price:price,
+
+                description:description,
+                categories:categories
+         }
+
+         if(imageUrl){
+                product.imageUrl = imageUrl.filename
+         }
+
+       Product.updateOne({_id:id, userId:req.user._id}, {
+           $set:product
+         })
 
 
-       Product.findOne({_id:id, userId:req.user._id}).then(product => {
+           //.then(product => {
 
-            product.name = req.body.name
-            product.price = req.body.price
-            product.imageUrl = req.body.imageUrl
-            product.description = req.body.description
-            product.categories = req.body.categories
+            // product.name = req.body.name
+            // product.price = req.body.price
+            // product.imageUrl = req.file.filename
+            // product.description = req.body.description
+            // product.categories = req.body.categories
 
-           product.save()
-               .then(() => {
-                   console.log("Güncelleme başarılı")
-                   res.redirect('/admin/products?action=edit')
-               })
-               .catch(err => {
-                   next(err)
+          // product.save()
+           .then(() => {
+               console.log("Güncelleme başarılı")
+               res.redirect('/admin/products?action=edit')
            })
-       })
+           .catch(err => {
+               next(err)
+           })
+    //   })
 
  }
 
