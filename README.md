@@ -1,6 +1,9 @@
 # Fullstack-Node.js-E-Commerce-BTK
 [https://myapp-67.herokuapp.com/](https://myapp-67.herokuapp.com/)
 
+if you wanna login user admin
+Email : root@gmail.com 
+Password: 1994ugur
 
 ![1](https://user-images.githubusercontent.com/13710309/117502481-400dee80-af88-11eb-8aec-c5bfa820e74c.png)
 ![2](https://user-images.githubusercontent.com/13710309/117502484-413f1b80-af88-11eb-9488-d7a02226cb15.png)
